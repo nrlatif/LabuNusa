@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hijau_latar"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="112dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_header_beranda"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Panduan Petani"
+                android:textColor="#AAFFFFFF"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informasi Penyakit"
+                android:textColor="@color/putih"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Ketuk kartu untuk melihat gejala &amp; cara mitigasi"
+                android:textColor="#CCFFFFFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- ========== KARTU 1: DAUN SEHAT ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSehat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/hijau_terang"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header Kartu -->
+                    <LinearLayout
+                        android:id="@+id/headerSehat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/hijau_kartu"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="48dp"
+                            android:background="@color/hijau_primer"
+                            android:layout_marginEnd="14dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Daun Sehat"
+                                android:textColor="@color/teks_gelap"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Kondisi daun normal"
+                                android:textColor="@color/teks_sekunder"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ikonSehat"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/hijau_primer" />
+                    </LinearLayout>
+
+                    <!-- Konten Kartu (awalnya tersembunyi) -->
+                    <LinearLayout
+                        android:id="@+id/kontenSehat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ciri-Ciri Daun Sehat"
+                            android:textColor="@color/hijau_primer"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="4dp"
+                            android:text="• Permukaan daun berwarna hijau merata\n• Tidak ada bercak atau perubahan warna\n• Tekstur daun kuat dan tidak layu\n• Pertumbuhan normal dan segar"
+                            android:textColor="@color/teks_sekunder"
+                            android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cara Perawatan"
+                            android:textColor="@color/hijau_primer"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="4dp"
+                            android:text="• Siram secara teratur di pagi hari\n• Berikan pupuk sesuai kebutuhan\n• Jaga kebersihan sekitar tanaman\n• Pantau secara rutin setiap minggu"
+                            android:textColor="@color/teks_sekunder"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== KARTU 2: EMBUN TEPUNG ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEmbun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/merah_penyakit"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/headerEmbun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/merah_latar"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="48dp"
+                            android:background="@color/merah_penyakit"
+                            android:layout_marginEnd="14dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Embun Tepung"
+                                android:textColor="@color/teks_gelap"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Powdery Mildew"
+                                android:textColor="@color/merah_penyakit"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ikonEmbun"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/merah_penyakit" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/kontenEmbun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:visibility="gone">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Gejala" android:textColor="@color/merah_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Muncul serbuk putih seperti tepung di permukaan daun\n• Daun menguning dan mengering dari tepi\n• Daun menggulung ke atas\n• Pertumbuhan tanaman terhambat"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Cara Penanganan &amp; Mitigasi"
+                            android:textColor="@color/merah_penyakit" android:textSize="14sp" android:textStyle="bold" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Semprot fungisida berbahan Sulfur atau Tembaga\n• Pangkas daun yang sudah terinfeksi berat\n• Pastikan sirkulasi udara cukup di antara tanaman\n• Hindari menyiram di malam hari\n• Kurangi kelembaban berlebihan di sekitar tanaman\n• Rotasi tanaman pada musim berikutnya"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Pencegahan" android:textColor="@color/merah_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Pilih varietas tahan penyakit\n• Jaga jarak tanam agar tidak terlalu rapat\n• Semprotkan larutan baking soda (1 sdm/liter air) secara preventif"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== KARTU 3: BERCAK DAUN ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardBercak"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/kuning_penyakit"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/headerBercak"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/kuning_latar"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View android:layout_width="6dp" android:layout_height="48dp"
+                            android:background="@color/kuning_penyakit" android:layout_marginEnd="14dp" />
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Bercak Daun" android:textColor="@color/teks_gelap"
+                                android:textSize="17sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp" android:text="Leaf Spot Disease"
+                                android:textColor="@color/kuning_penyakit" android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView android:id="@+id/ikonBercak" android:layout_width="24dp"
+                            android:layout_height="24dp" android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/kuning_penyakit" />
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/kontenBercak" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:orientation="vertical"
+                        android:padding="16dp" android:visibility="gone">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Gejala" android:textColor="@color/kuning_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Muncul bercak coklat kekuningan pada daun\n• Bercak dikelilingi pinggiran berwarna kuning\n• Bercak melebar dan menyatu pada infeksi berat\n• Daun menguning lalu rontok"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Cara Penanganan &amp; Mitigasi"
+                            android:textColor="@color/kuning_penyakit" android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Semprot fungisida berbahan Mankozeb atau Klorotalonil\n• Buang dan musnahkan daun yang terinfeksi (jangan dikompos)\n• Siram di pangkal tanaman, hindari membasahi daun\n• Jaga kebersihan alat berkebun\n• Kurangi kepadatan tanaman"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Pencegahan" android:textColor="@color/kuning_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Gunakan benih bersertifikat bebas penyakit\n• Semprot fungisida preventif saat musim hujan\n• Hindari melukai tanaman saat pemeliharaan"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ========== KARTU 4: LAYU FUSARIUM ========== -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLayu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/ungu_penyakit"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/headerLayu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/ungu_latar"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View android:layout_width="6dp" android:layout_height="48dp"
+                            android:background="@color/ungu_penyakit" android:layout_marginEnd="14dp" />
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Layu Fusarium" android:textColor="@color/teks_gelap"
+                                android:textSize="17sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp" android:text="Fusarium Wilt"
+                                android:textColor="@color/ungu_penyakit" android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView android:id="@+id/ikonLayu" android:layout_width="24dp"
+                            android:layout_height="24dp" android:src="@drawable/ic_arrow_down"
+                            app:tint="@color/ungu_penyakit" />
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/kontenLayu" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:orientation="vertical"
+                        android:padding="16dp" android:visibility="gone">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Gejala" android:textColor="@color/ungu_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Daun dan pucuk layu mendadak di siang hari\n• Menguning dari daun bawah ke atas\n• Batang bagian dalam berwarna coklat jika dipotong\n• Tanaman mati secara bertahap"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Cara Penanganan &amp; Mitigasi"
+                            android:textColor="@color/ungu_penyakit" android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Cabut dan bakar tanaman yang terinfeksi segera\n• Sterilkan tanah dengan kapur dolomit\n• Aplikasikan fungisida sistemik berbahan Benomil\n• Gunakan agen hayati Trichoderma sp. pada tanah\n• JANGAN menanam labu di lokasi yang sama minimal 3 musim"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+
+                        <View android:layout_width="match_parent" android:layout_height="1dp"
+                            android:background="@color/abu_garis" android:layout_marginVertical="12dp"/>
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Pencegahan" android:textColor="@color/ungu_penyakit"
+                            android:textSize="14sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="4dp"
+                            android:text="• Gunakan benih yang sudah diperlakukan fungisida\n• Perbaiki drainase tanah agar tidak tergenang\n• Rendam benih dengan larutan Trichoderma sebelum tanam\n• Rotasi tanaman wajib dilakukan"
+                            android:textColor="@color/teks_sekunder" android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

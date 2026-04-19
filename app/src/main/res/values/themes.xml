@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.LabuKu" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/hijau_primer</item>
+        <item name="colorPrimaryVariant">@color/hijau_sekunder</item>
+        <item name="colorOnPrimary">@color/putih</item>
+        <item name="colorSecondary">@color/aksen_peach</item>
+        <item name="colorOnSecondary">@color/putih</item>
+        <item name="android:windowBackground">@color/hijau_latar</item>
+        <item name="android:statusBarColor">@color/hijau_primer</item>
+        <item name="android:navigationBarColor">@color/nav_latar</item>
+        <item name="android:textColor">@color/teks_gelap</item>
+        <item name="materialCardViewStyle">@style/KartuAplikasi</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="bottomNavigationStyle">@style/NavBawahStyle</item>
+    </style>
+
+    <!-- Kartu standar: putih bersih dengan shadow halus -->
+    <style name="KartuAplikasi" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/putih</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/abu_garis</item>
+    </style>
+
+    <!-- Kartu tanpa border (untuk nested) -->
+    <style name="KartuDatar" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/abu_kartu</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Kartu aksen hijau -->
+    <style name="KartuHijau" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/hijau_kartu</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Tombol utama hijau -->
+    <style name="TombolUtama" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">14dp</item>
+        <item name="backgroundTint">@color/hijau_primer</item>
+        <item name="android:textColor">@color/putih</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:paddingVertical">14dp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <!-- Tombol outline -->
+    <style name="TombolOutline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">14dp</item>
+        <item name="strokeColor">@color/hijau_primer</item>
+        <item name="android:textColor">@color/hijau_primer</item>
+    </style>
+
+    <!-- Bottom Navigation Style - Glass -->
+    <style name="NavBawahStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/nav_item_selector</item>
+        <item name="itemTextColor">@color/nav_item_selector</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
+    </style>
+</resources>

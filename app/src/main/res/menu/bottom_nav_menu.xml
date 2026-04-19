@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_beranda"
+        android:icon="@drawable/ic_home_nav"
+        android:title="Beranda" />
+    <item
+        android:id="@+id/nav_informasi"
+        android:icon="@drawable/ic_informasi_nav"
+        android:title="Informasi" />
+    <!-- Item tengah kosong sebagai placeholder untuk FAB -->
+    <item
+        android:id="@+id/nav_scan_placeholder"
+        android:icon="@drawable/ic_camera_filled"
+        android:title=""
+        android:enabled="false" />
+    <item
+        android:id="@+id/nav_riwayat"
+        android:icon="@drawable/ic_riwayat_nav"
+        android:title="Riwayat" />
+    <item
+        android:id="@+id/nav_tentang"
+        android:icon="@drawable/ic_tentang_nav"
+        android:title="Tentang" />
+</menu>

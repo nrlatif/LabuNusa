@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hijau_latar"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="112dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_header_beranda"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="24dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="LabuKu" android:textColor="@color/putih"
+                android:textSize="32sp" android:textStyle="bold" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="v1.0 · Sistem Deteksi Penyakit Daun Labu Madu"
+                android:textColor="#AAFFFFFF" android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- Tentang Aplikasi -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Tentang Aplikasi" android:textColor="@color/hijau_primer"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:lineSpacingExtra="6dp"
+                        android:text="LabuKu adalah aplikasi kecerdasan buatan yang membantu petani mendeteksi penyakit pada daun tanaman Labu Madu secara cepat dan akurat menggunakan kamera ponsel."
+                        android:textColor="@color/teks_sekunder" android:textSize="14sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Model -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" app:cardCornerRadius="12dp" app:cardElevation="2dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Model AI" android:textColor="@color/hijau_primer"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Arsitektur" android:textColor="@color/teks_redup" android:textSize="11sp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="MobileNetV2" android:textColor="@color/oranye_peringatan"
+                        android:textSize="18sp" android:textStyle="bold" android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Format: TensorFlow Lite (.tflite)\nInput: 224 × 224 piksel"
+                        android:textColor="@color/teks_sekunder" android:textSize="13sp"
+                        android:lineSpacingExtra="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Kelas Deteksi -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp" app:cardElevation="2dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Kelas Deteksi" android:textColor="@color/hijau_primer"
+                        android:textSize="15sp" android:textStyle="bold" android:layout_marginBottom="10dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical" android:layout_marginBottom="8dp">
+                        <View android:layout_width="10dp" android:layout_height="10dp"
+                            android:background="@drawable/bg_dot_hijau" android:layout_marginEnd="10dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Daun Sehat" android:textColor="@color/teks_gelap" android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <View android:layout_width="10dp" android:layout_height="10dp"
+                            android:background="@drawable/bg_dot_merah" android:layout_marginEnd="10dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Embun Tepung" android:textColor="@color/teks_gelap" android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+                        <View android:layout_width="10dp" android:layout_height="10dp"
+                            android:background="@drawable/bg_dot_kuning" android:layout_marginEnd="10dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Bercak Daun" android:textColor="@color/teks_gelap" android:textSize="14sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical">
+                        <View android:layout_width="10dp" android:layout_height="10dp"
+                            android:background="@drawable/bg_dot_ungu" android:layout_marginEnd="10dp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Layu Fusarium" android:textColor="@color/teks_gelap" android:textSize="14sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

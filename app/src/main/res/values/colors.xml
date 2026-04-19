@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- === Warna Primer: Sage Green Lembut === -->
+    <color name="hijau_primer">#4CAF7D</color>
+    <color name="hijau_sekunder">#3D9E6E</color>
+    <color name="hijau_terang">#81C99A</color>
+    <color name="hijau_latar">#F4FAF6</color>
+    <color name="hijau_kartu">#E8F5EE</color>
+    <color name="hijau_muda">#D4EDDA</color>
+
+    <!-- === Warna Aksen: Warm Peach & Soft === -->
+    <color name="aksen_peach">#FF8A65</color>
+    <color name="aksen_lavender">#9C5FD6</color>
+    <color name="aksen_biru">#5BA4CF</color>
+    <color name="aksen_kuning">#F7C948</color>
+    <color name="oranye_peringatan">#FF7043</color>
+
+    <!-- === Warna Penyakit === -->
+    <color name="merah_penyakit">#E53935</color>
+    <color name="merah_latar">#FFEBEE</color>
+    <color name="kuning_penyakit">#F59E0B</color>
+    <color name="kuning_latar">#FFFBEB</color>
+    <color name="ungu_penyakit">#8B5CF6</color>
+    <color name="ungu_latar">#F5F3FF</color>
+
+    <!-- === Teks & Netral === -->
+    <color name="teks_utama">#1A3A2A</color>
+    <color name="teks_gelap">#1F2937</color>
+    <color name="teks_sekunder">#6B7280</color>
+    <color name="teks_redup">#9CA3AF</color>
+    <color name="putih">#FFFFFF</color>
+    <color name="abu_garis">#E5E7EB</color>
+    <color name="abu_kartu">#F9FAFB</color>
+
+    <!-- === Warna Navigasi === -->
+    <color name="nav_aktif">#4CAF7D</color>
+    <color name="nav_tidak_aktif">#9CA3AF</color>
+    <color name="nav_latar">#E8FFFFFF</color>
+    <color name="nav_glass_stroke">#40FFFFFF</color>
+    <color name="nav_glass_shadow">#1A4CAF7D</color>
+
+    <!-- Card shadows/overlays -->
+    <color name="overlay_gelap">#33000000</color>
+    <color name="overlay_putih">#AAFFFFFF</color>
+
+    <!-- Glass theme background -->
+    <color name="glass_putih">#CCF4FAF6</color>
+    <color name="glass_border">#66FFFFFF</color>
+</resources>

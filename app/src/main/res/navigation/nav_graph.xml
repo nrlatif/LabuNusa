@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_beranda">
+
+    <fragment
+        android:id="@+id/nav_beranda"
+        android:name="com.modul.labuku.ui.fragment.BerandaFragment"
+        android:label="Beranda"
+        tools:layout="@layout/fragment_beranda">
+        <action
+            android:id="@+id/action_beranda_to_scan"
+            app:destination="@id/nav_scan"
+            app:enterAnim="@anim/scale_up_enter"
+            app:exitAnim="@anim/scale_down_exit"
+            app:popEnterAnim="@anim/scale_up_enter"
+            app:popExitAnim="@anim/scale_down_exit" />
+        <action
+            android:id="@+id/action_beranda_to_informasi"
+            app:destination="@id/nav_informasi"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_beranda_to_riwayat"
+            app:destination="@id/nav_riwayat"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_beranda_to_tentang"
+            app:destination="@id/nav_tentang"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_scan"
+        android:name="com.modul.labuku.ui.fragment.ScanFragment"
+        android:label="Scan"
+        tools:layout="@layout/fragment_scan" />
+
+    <fragment
+        android:id="@+id/nav_informasi"
+        android:name="com.modul.labuku.ui.fragment.InformasiFragment"
+        android:label="Informasi"
+        tools:layout="@layout/fragment_informasi">
+        <action
+            android:id="@+id/action_informasi_to_scan"
+            app:destination="@id/nav_scan"
+            app:enterAnim="@anim/scale_up_enter"
+            app:exitAnim="@anim/scale_down_exit"
+            app:popEnterAnim="@anim/scale_up_enter"
+            app:popExitAnim="@anim/scale_down_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_riwayat"
+        android:name="com.modul.labuku.ui.fragment.RiwayatFragment"
+        android:label="Riwayat"
+        tools:layout="@layout/fragment_riwayat">
+        <action
+            android:id="@+id/action_riwayat_to_scan"
+            app:destination="@id/nav_scan"
+            app:enterAnim="@anim/scale_up_enter"
+            app:exitAnim="@anim/scale_down_exit"
+            app:popEnterAnim="@anim/scale_up_enter"
+            app:popExitAnim="@anim/scale_down_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_tentang"
+        android:name="com.modul.labuku.ui.fragment.TentangFragment"
+        android:label="Tentang"
+        tools:layout="@layout/fragment_tentang">
+        <action
+            android:id="@+id/action_tentang_to_scan"
+            app:destination="@id/nav_scan"
+            app:enterAnim="@anim/scale_up_enter"
+            app:exitAnim="@anim/scale_down_exit"
+            app:popEnterAnim="@anim/scale_up_enter"
+            app:popExitAnim="@anim/scale_down_exit" />
+    </fragment>
+
+</navigation>
