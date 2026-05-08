@@ -1,4 +1,4 @@
-﻿package com.modul.LabuNusa.ui.fragment
+package com.modul.LabuNusa.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -56,6 +56,11 @@ class BerandaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as? com.modul.LabuNusa.MainActivity)?.daftarkanHeader(
+                0,
+                binding.headerBeranda
+        )
+
         tampilkanSalamDanTanggal()
         tampilkanTipsHariIni()
         muatStatistikDariDatabase()
@@ -75,13 +80,7 @@ class BerandaFragment : Fragment() {
 
     private fun tampilkanSalamDanTanggal() {
         val jam = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        val salam =
-                when {
-                    jam < 11 -> "Selamat Pagi,"
-                    jam < 15 -> "Selamat Siang,"
-                    jam < 18 -> "Selamat Sore,"
-                    else -> "Selamat Malam,"
-                }
+        val salam = "Selamat Datang di"
         binding.tvSalam.text = salam
 
         val formatTanggal = SimpleDateFormat("EEE, dd MMM yyyy", Locale("id", "ID"))
@@ -127,7 +126,9 @@ class BerandaFragment : Fragment() {
                                 if (semua.isNotEmpty()) {
                                     val terakhir = semua.first()
                                     entitasTerakhir = terakhir
-                                    binding.cardHasilTerakhir.visibility = View.VISIBLE
+
+                                    binding.layoutDataTerakhir.visibility = View.VISIBLE
+                                    binding.tvBelumAdaRiwayat.visibility = View.GONE
 
                                     binding.tvHasilTerakhir.text = terakhir.hasilKlasifikasi
                                     binding.tvWaktuTerakhir.text =
@@ -166,7 +167,8 @@ class BerandaFragment : Fragment() {
                                             ContextCompat.getColor(requireContext(), tagWarna)
                                     )
                                 } else {
-                                    binding.cardHasilTerakhir.visibility = View.GONE
+                                    binding.layoutDataTerakhir.visibility = View.GONE
+                                    binding.tvBelumAdaRiwayat.visibility = View.VISIBLE
                                 }
                             }
                 } catch (e: Exception) {

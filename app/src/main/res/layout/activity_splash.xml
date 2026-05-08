@@ -2,52 +2,210 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootSplash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/hijau_primer">
+    android:background="#1A4A2E">
 
-    <ImageView
-        android:id="@+id/ikonDaun"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_daun_labu"
+    <!-- ===== LAYER 1: Gradient animasi latar ===== -->
+    <View
+        android:id="@+id/gradientOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_gradient_bg"
         android:alpha="0"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        app:layout_constraintBottom_toTopOf="@id/tvNama"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvNama"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+    <!-- ===== LAYER 2: Partikel daun melayang ===== -->
+    <com.modul.LabuNusa.ui.SplashParticleView
+        android:id="@+id/particleView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:alpha="0"
-        android:text="LabuKu"
-        android:textColor="@color/putih"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tvTagline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ikonDaun" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvTagline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+    <!-- ===== LAYER 3: Ripple ring luar (paling besar) ===== -->
+    <View
+        android:id="@+id/rippleRing3"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="@drawable/splash_ring"
         android:alpha="0"
-        android:text="Deteksi Penyakit Daun Labu"
-        android:textColor="#CCFFFFFF"
-        android:textSize="13sp"
+        android:scaleX="0.3"
+        android:scaleY="0.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNama" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
+
+    <!-- ===== LAYER 4: Ripple ring tengah ===== -->
+    <View
+        android:id="@+id/rippleRing2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/splash_ring"
+        android:alpha="0"
+        android:scaleX="0.3"
+        android:scaleY="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
+
+    <!-- ===== LAYER 5: Ripple ring dalam ===== -->
+    <View
+        android:id="@+id/rippleRing1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:background="@drawable/splash_ring_solid"
+        android:alpha="0"
+        android:scaleX="0.3"
+        android:scaleY="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
+
+    <!-- ===== LAYER 6: Grup konten utama (logo + teks) ===== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/groupLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:translationY="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42">
+
+        <!-- Logo bulat baru -->
+        <ImageView
+            android:id="@+id/ikonDaun"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_logo_labunusa"
+            android:scaleType="fitCenter"
+            android:scaleX="0"
+            android:scaleY="0"
+            android:contentDescription="Logo LabuNusa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Nama aplikasi -->
+        <TextView
+            android:id="@+id/tvNama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="LabuNusa"
+            android:textColor="@color/putih"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ikonDaun" />
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/tvTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text=""
+            android:textColor="#AAFFFFFF"
+            android:textSize="13sp"
+            android:letterSpacing="0.04"
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNama"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ===== LAYER 7: Garis separator tipis ===== -->
+    <View
+        android:id="@+id/lineAccent"
+        android:layout_width="0dp"
+        android:layout_height="1.5dp"
+        android:layout_marginTop="20dp"
+        android:background="#336DBF47"
+        android:scaleX="0"
+        android:alpha="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/groupLogo"
+        app:layout_constraintWidth_percent="0.45" />
+
+    <!-- ===== LAYER 8: Loading progress area di bawah layar ===== -->
+    <FrameLayout
+        android:id="@+id/loadingContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Label loading kecil di atas bar -->
+        <TextView
+            android:id="@+id/tvLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:text="Memuat aplikasi..."
+            android:textColor="#77FFFFFF"
+            android:textSize="10sp"
+            android:letterSpacing="0.08" />
+
+        <!-- Track bar (background gelap transparan) -->
+        <View
+            android:id="@+id/loadingTrack"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="bottom"
+            android:background="#25FFFFFF"
+            android:layerType="hardware" />
+
+        <!-- Fill bar (progres hijau) -->
+        <View
+            android:id="@+id/loadingFill"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="bottom|start"
+            android:background="#6DBF47"
+            android:scaleX="0"
+            android:transformPivotX="0dp"
+            android:layerType="hardware" />
+
+    </FrameLayout>
+
+    <!-- Versi di bawah layar -->
+    <TextView
+        android:id="@+id/tvVersi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:alpha="0"
+        android:text="v1.0 • LabuNusa"
+        android:textColor="#44FFFFFF"
+        android:textSize="10sp"
+        android:letterSpacing="0.06"
+        app:layout_constraintBottom_toTopOf="@id/loadingContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

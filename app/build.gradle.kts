@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.modul.labuku"
+    namespace = "com.modul.LabuNusa"
     compileSdk = 35
 
     androidResources {
@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.modul.labuku"
+        applicationId = "com.modul.LabuNusa"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

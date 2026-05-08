@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    FAB Camera — Pure Emboss (no shadow)
+    Layer 1: bodi hijau gradient utama
+    Layer 2: highlight radial putih pojok kiri atas → efek cahaya timbul
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Bodi utama: gradient hijau bold/tegas -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#10B981"
+                android:centerColor="#059669"
+                android:endColor="#047857" />
+        </shape>
+    </item>
+
+    <!-- Highlight tipis saja agar warna hijaunya tetap pekat -->
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="70%"
+                android:centerX="0.32"
+                android:centerY="0.28"
+                android:startColor="#20FFFFFF"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+
+</layer-list>
+

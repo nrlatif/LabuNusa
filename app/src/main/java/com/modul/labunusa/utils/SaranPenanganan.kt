@@ -1,7 +1,7 @@
-package com.modul.labuku.utils
+﻿package com.modul.LabuNusa.utils
 
-object HelperMitigasi {
-    fun dapatkanMitigasi(label: String): String {
+object SaranPenanganan {
+    fun ambilSaran(label: String): String {
         return when (label.lowercase()) {
             "bercak daun" -> "Buang dan bakar daun yang terinfeksi agar tidak menyebar. Semprotkan fungisida berbahan aktif tembaga atau mankozeb pada pagi atau sore hari. Jaga jarak tanam agar sirkulasi udara baik."
             "embun tepung" -> "Semprotkan fungisida berbasis belerang (sulfur) atau fungisida nabati (seperti ekstrak mimba). Kurangi kelembapan di sekitar tanaman dengan pemangkasan daun."

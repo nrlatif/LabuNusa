@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    LabuNusa — Logo Tipografi
+    Konsep: Lettermark "L" bold dengan siluet daun di sudut dalam,
+    background kotak rounded hijau tua.
+    Viewport: 200 x 200
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- ===== BACKGROUND: Rounded Square hijau tua ===== -->
+    <path
+        android:fillColor="#1A4A2E"
+        android:pathData="
+          M36,0 L164,0
+          Q200,0 200,36
+          L200,164
+          Q200,200 164,200
+          L36,200
+          Q0,200 0,164
+          L0,36
+          Q0,0 36,0 Z" />
+
+    <!-- ===== HURUF L — Bold Geometric ===== -->
+    <!-- Batang vertikal L -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,42 L80,42 L80,148 L148,148 L148,170 L52,170 Z" />
+
+    <!-- ===== DAUN — Di sudut dalam L (pojok kanan bawah celah L) ===== -->
+    <!-- Daun lobus kiri: tumbuh dari titik pertemuan L ke kiri-atas -->
+    <path
+        android:fillColor="#6DBF47"
+        android:pathData="
+          M83,118
+          C83,118 74,108 74,96
+          C74,84 82,76 90,78
+          C96,79 98,86 97,94
+          C96,102 90,110 83,118 Z" />
+
+    <!-- Daun lobus kanan: ke kanan-atas -->
+    <path
+        android:fillColor="#52A832"
+        android:pathData="
+          M83,118
+          C83,118 94,112 100,102
+          C106,92 104,80 97,78
+          C91,76 86,83 85,92
+          C84,101 83,110 83,118 Z" />
+
+    <!-- Tangkai daun kecil -->
+    <path
+        android:strokeColor="#3D8C1F"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M83,118 L83,145" />
+
+    <!-- Urat tengah daun kiri -->
+    <path
+        android:strokeColor="#AAFFCC"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M83,118 L77,86" />
+
+    <!-- Urat tengah daun kanan -->
+    <path
+        android:strokeColor="#88DD99"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M83,118 L96,88" />
+
+    <!-- ===== TITIK AKSEN: pojok kanan atas L (dekorasi tipografi) ===== -->
+    <path
+        android:fillColor="#6DBF47"
+        android:pathData="M74,42 L80,42 L80,48 L74,48 Z" />
+
+</vector>

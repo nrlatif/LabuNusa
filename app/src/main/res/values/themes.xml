@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.LabuKu" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.LabuNusa" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/hijau_primer</item>
         <item name="colorPrimaryVariant">@color/hijau_sekunder</item>
         <item name="colorOnPrimary">@color/putih</item>
         <item name="colorSecondary">@color/aksen_peach</item>
         <item name="colorOnSecondary">@color/putih</item>
         <item name="android:windowBackground">@color/hijau_latar</item>
-        <item name="android:statusBarColor">@color/hijau_primer</item>
-        <item name="android:navigationBarColor">@color/nav_latar</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/putih</item>
         <item name="android:textColor">@color/teks_gelap</item>
         <item name="materialCardViewStyle">@style/KartuAplikasi</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="bottomNavigationStyle">@style/NavBawahStyle</item>
+    </style>
+
+    <!-- Tema khusus MainActivity: windowBackground hijau gelap agar tidak ada flash putih saat transisi dari splash -->
+    <style name="Theme.LabuNusa.Main" parent="Theme.LabuNusa">
+        <item name="android:windowBackground">@color/hijau_sekunder</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <!-- Kartu standar: putih bersih dengan shadow halus -->
@@ -55,12 +62,30 @@
         <item name="android:textColor">@color/hijau_primer</item>
     </style>
 
-    <!-- Bottom Navigation Style - Glass -->
+    <!-- Bottom Navigation Style - Terang (sesuai referensi) -->
     <style name="NavBawahStyle" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconTint">@color/nav_item_selector</item>
         <item name="itemTextColor">@color/nav_item_selector</item>
-        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="backgroundTint">@android:color/transparent</item>
         <item name="elevation">0dp</item>
+        <item name="itemRippleColor">@color/hijau_primer</item>
+        <item name="itemTextAppearanceActive">@style/NavLabelAktif</item>
+        <item name="itemTextAppearanceInactive">@style/NavLabelNonAktif</item>
+    </style>
+
+    <!-- Label aktif nav bawah -->
+    <style name="NavLabelAktif" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Label non-aktif nav bawah -->
+    <style name="NavLabelNonAktif" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 </resources>

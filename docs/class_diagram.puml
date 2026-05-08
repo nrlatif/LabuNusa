@@ -1,0 +1,171 @@
+@startuml LabuKu_Class_Diagram
+
+' ============================================================
+'  STYLE - Green theme
+' ============================================================
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName "Arial"
+skinparam defaultFontSize 11
+skinparam linetype ortho
+
+skinparam class {
+    BackgroundColor #F0FFF0
+    BorderColor #4CAF50
+    ArrowColor #2E7D32
+    FontName "Arial"
+    FontSize 11
+    FontColor #000000
+    AttributeFontName "Arial"
+    AttributeFontSize 10
+    HeaderBackgroundColor #4CAF50
+    HeaderFontColor #FFFFFF
+    HeaderFontName "Arial"
+    HeaderFontSize 11
+    HeaderFontStyle bold
+    StereotypeFontName "Arial"
+    StereotypeFontSize 9
+    StereotypeFontStyle italic
+    StereotypeFontColor #FFFFFF
+    AttributeIconSize 10
+}
+
+skinparam interface {
+    BackgroundColor #F0FFF0
+    BorderColor #4CAF50
+    HeaderBackgroundColor #4CAF50
+    HeaderFontColor #FFFFFF
+}
+
+hide empty members
+
+title
+<b><font size=14>LabuKu — Class Diagram</font></b>
+<i>Aplikasi Klasifikasi Penyakit Daun Labu</i>
+end title
+
+' ============================================================
+'  CLASSES
+' ============================================================
+
+class IdentifikasiFragment <<Fragment>> {
+    - kamera : ImageCapture
+    - pengklasifikasi : PengklasifikasiGambar
+    - eksekutorKamera : ExecutorService
+    __
+    + mulaiKamera()
+    + tangkapFoto()
+    + periksaIzinGaleri()
+    + bukaGaleri()
+    + klasifikasiDariGaleri()
+    + prosesGambar()
+    + simpanRiwayat()
+}
+
+class PengklasifikasiGambar <<Classifier>> {
+    - interpreter : Interpreter
+    - labels : List<String>
+    - imageSizeX : Int
+    - imageSizeY : Int
+    __
+    + inisialisasiModel()
+    + klasifikasiDaun()
+}
+
+class HasilKlasifikasi <<data class>> {
+    + label : String
+    + skor : Float
+}
+
+class InformasiFragment <<Fragment>> {
+    __
+    + buatDaftarInformasi()
+}
+
+class InformasiAdapter <<Adapter>> {
+    - daftar : List<ModelInformasi>
+    __
+    + onBindViewHolder()
+    + getItemCount()
+}
+
+class ModelInformasi <<data class>> {
+    + judul : String
+    + subjudul : String
+    + warnaPrimaryRes : Int
+    + seksiBagian : List<SeksiBagian>
+    + sedangDibuka : Boolean
+}
+
+class SeksiBagian <<data class>> {
+    + judul : String
+    + isi : String
+}
+
+class RiwayatFragment <<Fragment>> {
+    __
+    + tampilkanKosong()
+    + tampilkanDetailPenyakit()
+}
+
+class RiwayatAdapter <<Adapter>> {
+    - onHapus : (EntitasRiwayat) -> Unit
+    - onKlik : (EntitasRiwayat) -> Unit
+    __
+    + tampilkanItem()
+    + hapusRiwayat()
+}
+
+class EntitasRiwayat <<Entity>> {
+    + idRiwayat : Int  <<PK>>
+    + waktuScan : Long
+    + lokasiGambar : String
+    + hasilKlasifikasi : String
+    + skorAkurasi : Float
+}
+
+class SaranPenanganan <<Singleton>> {
+    __
+    + {static} ambilSaran()
+}
+
+class BasisDataAplikasi <<Database>> {
+    __
+    + {static} bukaDatabase()
+    + aksesRiwayat()
+}
+
+interface DaoRiwayat <<Dao>> {
+    + simpan()
+    + ambilSemua()
+    + hapus()
+}
+
+' ============================================================
+'  RELATIONSHIPS
+' ============================================================
+
+' -- Identifikasi --
+IdentifikasiFragment "1" --> "1" PengklasifikasiGambar : uses
+PengklasifikasiGambar ..> HasilKlasifikasi : <<returns>>
+IdentifikasiFragment "1" ..> "1" EntitasRiwayat : <<creates>>
+IdentifikasiFragment "1" ..> "1" BasisDataAplikasi : <<writes>>
+IdentifikasiFragment "1" ..> "1" SaranPenanganan : <<uses>>
+
+' -- Riwayat --
+RiwayatFragment "1" *--> "1" RiwayatAdapter : creates
+RiwayatAdapter "1" --> "0..*" EntitasRiwayat : binds
+RiwayatFragment "1" ..> "1" BasisDataAplikasi : <<reads>>
+RiwayatFragment "1" ..> "1" SaranPenanganan : <<uses>>
+
+' -- Informasi --
+InformasiFragment "1" *--> "1" InformasiAdapter : creates
+InformasiAdapter "1" --> "0..*" ModelInformasi : binds
+ModelInformasi "1" --> "1..*" SeksiBagian : contains
+InformasiFragment "1" ..> "1" SaranPenanganan : <<uses>>
+
+' -- Database --
+BasisDataAplikasi "1" --> "1" DaoRiwayat : exposes
+DaoRiwayat "1" --> "0..*" EntitasRiwayat : <<CRUD>>
+
+@enduml

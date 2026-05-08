@@ -3,4 +3,6 @@
     <!-- Override default Material BottomNavigationView min widths to enforce squeezing on smaller android phones, preventing cutoff -->
     <dimen name="design_bottom_navigation_item_min_width" tools:override="true">20dp</dimen>
     <dimen name="design_bottom_navigation_active_item_min_width" tools:override="true">20dp</dimen>
+    <dimen name="stroke_normal">1dp</dimen>
+    <dimen name="stroke_selected">2dp</dimen>
 </resources>

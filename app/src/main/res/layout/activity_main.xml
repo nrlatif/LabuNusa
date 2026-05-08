@@ -9,7 +9,8 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/hijau_latar" />
 
     <!-- Container untuk fullscreen scan -->
     <FrameLayout
@@ -18,66 +19,74 @@
         android:layout_height="match_parent"
         android:elevation="40dp" />
 
-    <!-- Glass Bottom Nav Container -->
+    <!-- CONTAINER NAVBAR BAWAH (Fixed di Bawah Layar) -->
+    <!-- Menggunakan FrameLayout dengan lingkaran putih di belakang FAB untuk efek bulge ke atas -->
     <FrameLayout
         android:id="@+id/nav_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="104dp"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        android:clipToPadding="false"
         android:clipChildren="false"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp">
+        android:clipToPadding="false">
 
-        <!-- Glass background card -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- 1. Lingkaran Putih Lebar di belakang FAB (Efek Bulge). -->
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_putih_bulat"
+            android:elevation="4dp" />
+
+        <!-- 2. WRAPPER UNTUK NAVBAR. -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="68dp"
-            app:cardCornerRadius="34dp"
-            app:cardElevation="12dp"
-            app:cardBackgroundColor="#EDFFFFFF"
-            app:strokeWidth="0dp"
-            app:cardMaxElevation="12dp">
+            android:layout_height="64dp"
+            android:layout_gravity="bottom"
+            android:elevation="4dp"
+            android:clipChildren="true">
 
+            <!-- Background bar putih datar -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/putih" />
+
+            <!-- BottomNavigationView transparan -->
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_nav_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:outlineProvider="none"
                 app:itemIconTint="@color/nav_item_selector"
                 app:itemTextColor="@color/nav_item_selector"
-                app:labelVisibilityMode="unlabeled"
+                app:labelVisibilityMode="labeled"
                 app:menu="@menu/bottom_nav_menu"
-                app:elevation="0dp"
-                app:itemIconSize="24dp" />
+                app:itemIconSize="24dp"
+                app:itemPaddingTop="14dp"
+                app:itemPaddingBottom="10dp" />
+        </FrameLayout>
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- FAB Camera Button (menonjol ke atas di tengah) -->
+        <!-- FAB Camera Hijau -->
         <FrameLayout
             android:id="@+id/fab_scan"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_gravity="center_horizontal|top"
-            android:layout_marginTop="-8dp"
-            android:background="@drawable/bg_fab_camera"
-            android:elevation="13dp"
-            android:outlineAmbientShadowColor="@android:color/transparent"
-            android:outlineSpotShadowColor="@android:color/transparent"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_fab_camera_emboss"
+            android:elevation="6dp"
             android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
-                android:layout_width="26dp"
-                android:layout_height="26dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_camera_filled"
                 app:tint="@color/putih" />
-
         </FrameLayout>
 
     </FrameLayout>

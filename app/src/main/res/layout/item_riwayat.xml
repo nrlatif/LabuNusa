@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardRiwayat"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -16,13 +17,41 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <!-- Thumbnail Gambar -->
-        <ImageView
-            android:id="@+id/imgRiwayat"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleType="centerCrop"
-            android:background="@color/abu_kartu" />
+        <!-- Thumbnail + Overlay Seleksi -->
+        <FrameLayout
+            android:layout_width="88dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_img_corner_kiri"
+            android:clipToOutline="true">
+
+            <ImageView
+                android:id="@+id/imgRiwayat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:minHeight="80dp"
+                android:background="@color/abu_kartu" />
+
+            <!-- Overlay gelap saat item dipilih -->
+            <View
+                android:id="@+id/overlaySeleksi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#CC1C3D2B"
+                android:visibility="gone" />
+
+            <!-- Checkbox centang di tengah -->
+            <CheckBox
+                android:id="@+id/checkboxSeleksi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:focusable="false"
+                android:buttonTint="@color/putih"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <!-- Konten Teks -->
         <LinearLayout
@@ -30,17 +59,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="12dp">
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp">
 
-            <!-- Badge Kategori -->
             <TextView
                 android:id="@+id/tvKategoriRiwayat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_badge_kategori"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="3dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:text="SEHAT"
                 android:textColor="@color/putih"
                 android:textSize="9sp"
@@ -75,9 +107,10 @@
                 android:text="16 Apr 2026 • 14:32"
                 android:textColor="@color/teks_redup"
                 android:textSize="11sp" />
+
         </LinearLayout>
 
-        <!-- Tombol Hapus -->
+        <!-- Tombol Hapus (sembunyi di mode seleksi) -->
         <ImageView
             android:id="@+id/btnHapus"
             android:layout_width="36dp"
@@ -88,7 +121,7 @@
             app:tint="@color/merah_penyakit"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true" />
 
         <!-- Strip warna kanan -->
         <View
@@ -98,4 +131,5 @@
             android:background="@color/hijau_primer" />
 
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

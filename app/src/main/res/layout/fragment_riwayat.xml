@@ -1,26 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/hijau_latar"
-    android:orientation="vertical">
+    android:background="@color/hijau_latar">
 
     <!-- Header -->
     <LinearLayout
+        android:id="@+id/headerRiwayat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_header_beranda"
         android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="56dp"
-        android:paddingBottom="24dp">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="56dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Riwayat Scan"
+            android:text="Aktivitas Anda"
+            android:textColor="#CCFFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Riwayat Identifikasi"
             android:textColor="@color/putih"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -32,54 +39,217 @@
             android:text="Rekaman hasil diagnosis daun"
             android:textColor="#AAFFFFFF"
             android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_tanggal_pill"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="RIWAYAT ANALISIS"
+            android:textColor="#EEFFFFFF"
+            android:textSize="12sp"
+            android:letterSpacing="0.08"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvRiwayat"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="112dp" />
-
-    <!-- Empty State -->
+    <!-- ===== KONTEN UTAMA MENGGUNAKAN LAYER MELENGKUNG ===== -->
     <LinearLayout
-        android:id="@+id/tvKosong"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="32dp"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerRiwayat"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="-32dp"
+        android:background="@drawable/bg_content_rounded"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🌿"
-            android:textSize="48sp"
-            android:layout_marginBottom="16dp" />
+        <!-- Toolbar Seleksi (muncul saat mode multi-select aktif) -->
+        <LinearLayout
+            android:id="@+id/toolbarSeleksi"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_toolbar_seleksi"
+            android:paddingStart="4dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="8dp"
+            android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Belum Ada Riwayat"
-            android:textColor="@color/teks_gelap"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            <ImageView
+                android:id="@+id/btnBatalSeleksi"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/putih"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvJumlahSeleksi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="0 item dipilih"
+                android:textColor="@color/putih"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnPilihSemua"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="8dp"
+                android:text="Semua"
+                android:textColor="#CCFFFFFF"
+                android:textSize="13sp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/btnHapusSeleksi"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/putih"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+        <!-- Filter Chips -->
+        <HorizontalScrollView
+            android:id="@+id/scrollFilter"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mulai periksa daun untuk\nmelihat hasilnya di sini"
-            android:textColor="@color/teks_sekunder"
-            android:textSize="14sp"
+            android:scrollbars="none"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="8dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSemua"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Semua"
+                    android:checked="true"
+                    app:chipBackgroundColor="@color/chip_bg_selector"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/chip_text_selector"
+                    app:checkedIconVisible="false"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipSehat"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sehat"
+                    app:chipBackgroundColor="@color/chip_bg_selector"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/chip_text_selector"
+                    app:checkedIconVisible="false"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPenyakit"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Penyakit"
+                    app:chipBackgroundColor="@color/chip_bg_selector"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/chip_text_selector"
+                    app:checkedIconVisible="false"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipNonDaun"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Non-Daun"
+                    app:chipBackgroundColor="@color/chip_bg_selector"
+                    app:chipStrokeWidth="0dp"
+                    android:textColor="@color/chip_text_selector"
+                    app:checkedIconVisible="false"
+                    app:chipMinTouchTargetSize="0dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRiwayat"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="120dp" />
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/tvKosong"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:lineSpacingExtra="4dp" />
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌿"
+                android:textSize="48sp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Belum Ada Riwayat"
+                android:textColor="@color/teks_gelap"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mulai periksa daun untuk\nmelihat hasilnya di sini"
+                android:textColor="@color/teks_sekunder"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

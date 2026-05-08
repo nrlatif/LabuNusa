@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gradient background splash screen dari hijau gelap ke hijau yang lebih terang di bawah -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:type="radial"
+        android:gradientRadius="100%"
+        android:startColor="#2E6B47"
+        android:endColor="#0F2D1B" />
+</shape>

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <!-- Kamera Fullscreen -->
+    <!-- ═══ LAYER 1: Kamera Fullscreen ═══ -->
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="0dp"
@@ -15,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Pratinjau Gambar -->
+    <!-- ═══ LAYER 2: Pratinjau setelah foto diambil ═══ -->
     <ImageView
         android:id="@+id/imgPratinjau"
         android:layout_width="0dp"
@@ -27,104 +28,117 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Gradient Atas -->
+    <!-- ═══ LAYER 3: Vignette atas (fade hitam) ═══ -->
     <View
         android:layout_width="0dp"
-        android:layout_height="140dp"
+        android:layout_height="160dp"
         android:background="@drawable/gradient_atas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Gradient Bawah -->
+    <!-- ═══ LAYER 4: Vignette bawah (fade hitam) ═══ -->
     <View
         android:layout_width="0dp"
-        android:layout_height="280dp"
+        android:layout_height="260dp"
         android:background="@drawable/gradient_bawah"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Tombol Kembali (Lingkaran Modern) -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnKembali"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+    <!-- ═══ TOP BAR: Tombol kembali + Judul ═══ -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="48dp"
-        app:cardBackgroundColor="#CC1A3A2A"
-        app:cardCornerRadius="22dp"
-        app:strokeColor="#4DFFFFFF"
-        app:strokeWidth="1dp"
-        app:cardElevation="0dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/putih" />
-    </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/tvJudulScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Pindai Daun Labu"
-        android:textColor="@color/putih"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:letterSpacing="-0.02"
-        android:shadowColor="#80000000"
-        android:shadowDx="0"
-        android:shadowDy="2"
-        android:shadowRadius="4"
-        app:layout_constraintBottom_toBottomOf="@id/btnKembali"
-        app:layout_constraintStart_toEndOf="@id/btnKembali"
-        app:layout_constraintTop_toTopOf="@id/btnKembali" />
+        <!-- Tombol kembali – pill transparan -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnKembali"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardBackgroundColor="#33FFFFFF"
+            app:cardCornerRadius="20dp"
+            app:strokeColor="#33FFFFFF"
+            app:strokeWidth="1dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/putih" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <!-- Target Bidik (Vector Frame) -->
+        <!-- Judul di tengah -->
+        <TextView
+            android:id="@+id/tvJudulScan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="Pindai Daun"
+            android:textColor="@color/putih"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.01"
+            app:layout_constraintBottom_toBottomOf="@id/btnKembali"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnKembali"
+            app:layout_constraintTop_toTopOf="@id/btnKembali" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ═══ AREA BIDIK: Corner frame elegan ═══ -->
     <ImageView
         android:id="@+id/targetBidik"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:src="@drawable/ic_scan_frame"
         android:scaleType="fitCenter"
+        android:alpha="0.85"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintVertical_bias="0.38" />
 
+    <!-- Label panduan di bawah frame bidik -->
     <TextView
         android:id="@+id/tvPanduanBidik"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Arahkan kamera ke daun hingga fokus"
-        android:textColor="#E6FFFFFF"
-        android:textSize="14sp"
+        android:layout_marginTop="18dp"
+        android:text="Posisikan daun dalam bingkai"
+        android:textColor="#CCFFFFFF"
+        android:textSize="13sp"
         android:letterSpacing="0.02"
-        android:background="@drawable/bg_ikon_putih_alpha"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/targetBidik" />
 
-    <!-- Kartu Hasil Analisis (Stylish Floating Card) -->
+    <!-- ═══ KARTU HASIL ANALISIS ═══ -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardHasil"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="140dp"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/putih"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="24dp"
+        app:cardBackgroundColor="#F8FFFFFF"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#1A4CAF7D"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -133,150 +147,155 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp">
 
+            <!-- Baris atas: badge + ikon -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
-                
+
                 <TextView
                     android:id="@+id/tvTagHasil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_badge_kategori"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="6dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     android:text="HASIL ANALISIS"
                     android:textColor="@color/putih"
-                    android:textSize="11sp"
-                    android:letterSpacing="0.05"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.06"
                     android:textStyle="bold" />
-                    
+
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-                    
+
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:src="@drawable/ic_daun_labu"
                     app:tint="@color/hijau_primer" />
             </LinearLayout>
 
+            <!-- Divider tipis -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#0F000000"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Label hasil -->
             <TextView
                 android:id="@+id/tvLabelHasil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="Menganalisa..."
                 android:textColor="@color/teks_gelap"
-                android:textSize="26sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:letterSpacing="-0.02" />
+                android:letterSpacing="-0.01" />
 
+            <!-- Skor akurasi -->
             <TextView
                 android:id="@+id/tvSkorHasil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:textColor="@color/teks_sekunder"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
+            <!-- Mitigasi -->
             <TextView
                 android:id="@+id/tvMitigasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/teks_sekunder"
-                android:textSize="14sp"
-                android:lineSpacingExtra="4dp" />
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp" />
 
+            <!-- Tombol tutup -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTutupHasil"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="24dp"
-                android:text="Tutup &amp; Lanjutkan"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:text="Selesai"
                 android:textColor="@color/putih"
-                android:textSize="15sp"
-                app:cornerRadius="16dp"
-                app:backgroundTint="@color/teks_gelap"
+                android:textSize="14sp"
+                android:letterSpacing="0.02"
+                app:cornerRadius="14dp"
+                app:backgroundTint="@color/hijau_primer"
                 app:elevation="0dp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Panel Aksi Bawah -->
+    <!-- ═══ PANEL AKSI BAWAH: Galeri + Potret ═══ -->
     <LinearLayout
         android:id="@+id/layoutAksi"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="42dp"
-        android:gravity="center"
+        android:layout_marginBottom="48dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#CC1A3A2A"
-            app:cardCornerRadius="45dp"
-            app:strokeColor="#80FFFFFF"
-            app:strokeWidth="1dp"
-            app:cardElevation="0dp">
+        <!-- Tombol Galeri -->
+        <LinearLayout
+            android:id="@+id/btnGaleriContainer"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/bg_ikon_putih_alpha"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/btnGaleri"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_gallery"
+                app:tint="@color/putih" />
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="14dp"
-                android:gravity="center_vertical">
+        <!-- Tombol Potret utama -->
+        <LinearLayout
+            android:id="@+id/btnPotretContainer"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/bg_tombol_kamera_utama"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="4dp">
+            <ImageView
+                android:id="@+id/btnPotret"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_camera_filled"
+                app:tint="@color/putih" />
+        </LinearLayout>
 
-                <!-- Tombol Galeri -->
-                <LinearLayout
-                    android:id="@+id/btnGaleriContainer"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:background="@drawable/bg_ikon_putih_alpha"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:clickable="true"
-                    android:focusable="true">
-                    <ImageView
-                        android:id="@+id/btnGaleri"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_gallery"
-                        app:tint="@color/putih" />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="24dp"
-                    android:layout_height="wrap_content" />
-
-                <!-- Tombol Potret -->
-                <LinearLayout
-                    android:id="@+id/btnPotretContainer"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/bg_tombol_kamera_utama"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:elevation="4dp">
-                    <ImageView
-                        android:id="@+id/btnPotret"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/ic_camera_filled"
-                        app:tint="@color/putih" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        <!-- Spacer kanan agar tombol galeri-potret simetris -->
+        <View
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="28dp" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

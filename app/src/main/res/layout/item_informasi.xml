@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardInformasi"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Kartu (klik untuk expand/collapse) -->
+        <LinearLayout
+            android:id="@+id/headerKartu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <!-- Strip Warna Kiri -->
+            <View
+                android:id="@+id/stripKiri"
+                android:layout_width="6dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="14dp" />
+
+            <!-- Judul & Subjudul -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvJudul"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/teks_gelap"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSubjudul"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Ikon Panah -->
+            <ImageView
+                android:id="@+id/ikonPanah"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_down" />
+        </LinearLayout>
+
+        <!-- Konten Kartu (expand/collapse) -->
+        <LinearLayout
+            android:id="@+id/kontenKartu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <!-- Seksi 1 -->
+            <TextView
+                android:id="@+id/tvJudulSeksi1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvIsiSeksi1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/teks_sekunder"
+                android:textSize="13sp" />
+
+            <!-- Divider 1 -->
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/abu_garis"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Seksi 2 -->
+            <TextView
+                android:id="@+id/tvJudulSeksi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvIsiSeksi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/teks_sekunder"
+                android:textSize="13sp" />
+
+            <!-- Divider 2 (opsional, tampil jika ada seksi ke-3) -->
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/abu_garis"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
+
+            <!-- Seksi 3 (opsional) -->
+            <TextView
+                android:id="@+id/tvJudulSeksi3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvIsiSeksi3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/teks_sekunder"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
