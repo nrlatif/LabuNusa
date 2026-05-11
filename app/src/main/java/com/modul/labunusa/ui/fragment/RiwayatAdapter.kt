@@ -76,15 +76,16 @@ class RiwayatAdapter(
                 else -> "PENYAKIT"
             }
             binding.tvKategoriRiwayat.setBackgroundColor(warna)
-
+            val fileAnotasi = entitas.lokasiGambarAnotasi?.let { File(it) }
             val fileGambar = File(entitas.lokasiGambar)
-            if (fileGambar.exists()) {
-                binding.imgRiwayat.load(fileGambar) { crossfade(true) }
-            } else {
-                binding.imgRiwayat.setImageResource(R.drawable.ic_daun_labu)
+            when {
+                fileAnotasi != null && fileAnotasi.exists() ->
+                    binding.imgRiwayat.load(fileAnotasi) { crossfade(true) }
+                fileGambar.exists() ->
+                    binding.imgRiwayat.load(fileGambar) { crossfade(true) }
+                else ->
+                    binding.imgRiwayat.setImageResource(R.drawable.ic_daun_labu)
             }
-
-            // ── Tampilan mode seleksi ──
             val terpilih = entitas.idRiwayat in itemTerpilih
             if (modeSeleksi) {
                 binding.btnHapus.visibility = View.GONE
@@ -107,7 +108,6 @@ class RiwayatAdapter(
                     ContextCompat.getColor(ctx, R.color.abu_garis)
             }
 
-            // ── Listener ──
             binding.root.setOnLongClickListener {
                 if (!modeSeleksi) {
                     masukModeSeleksi()
@@ -169,7 +169,6 @@ class RiwayatAdapter(
                     (ctx.resources.displayMetrics.widthPixels * 0.88).toInt(),
                     android.view.WindowManager.LayoutParams.WRAP_CONTENT
                 )
-                // Rounded corners via background drawable on the content view
                 view.background = androidx.core.content.ContextCompat.getDrawable(
                     ctx, com.modul.LabuNusa.R.drawable.bg_dialog_rounded
                 )

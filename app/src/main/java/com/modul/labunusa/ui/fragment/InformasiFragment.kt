@@ -1,9 +1,11 @@
 package com.modul.LabuNusa.ui.fragment
 
+import android.graphics.Outline
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.modul.LabuNusa.R
@@ -37,6 +39,22 @@ class InformasiFragment : Fragment() {
 
         binding.rvInformasi.layoutManager = LinearLayoutManager(requireContext())
         binding.rvInformasi.adapter = adapter
+
+        // Custom outline provider: rounded rect hanya di sudut atas.
+        // Outline diperluas ke bawah (+ cornerRadius) agar sudut bawah
+        // tidak terpotong, sehingga hanya sudut atas yang meng-clip konten.
+        val cornerRadiusPx = resources.getDimension(R.dimen.radius_konten_rounded)
+        binding.contentContainer.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                outline.setRoundRect(
+                    0, 0,
+                    view.width,
+                    view.height + cornerRadiusPx.toInt(),
+                    cornerRadiusPx
+                )
+            }
+        }
+        binding.contentContainer.clipToOutline = true
     }
 
     private fun buatDaftarInformasi(): List<ModelInformasi> =

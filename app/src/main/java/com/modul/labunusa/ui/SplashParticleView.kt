@@ -59,7 +59,7 @@ constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
             particles.add(
                     Partikel(
                             x = Random.nextFloat() * w,
-                            y = Random.nextFloat() * h + h * 0.2f, // mulai dari area tengah-bawah
+                            y = Random.nextFloat() * h + h * 0.2f,
                             ukuran = uk,
                             kecepatan = Random.nextFloat() * 0.6f + 0.3f,
                             rotasi = Random.nextFloat() * 360f,

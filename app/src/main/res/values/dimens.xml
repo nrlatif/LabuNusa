@@ -5,4 +5,6 @@
     <dimen name="design_bottom_navigation_active_item_min_width" tools:override="true">20dp</dimen>
     <dimen name="stroke_normal">1dp</dimen>
     <dimen name="stroke_selected">2dp</dimen>
+    <!-- Radius sudut atas container konten (sinkron dengan bg_content_rounded.xml) -->
+    <dimen name="radius_konten_rounded">32dp</dimen>
 </resources>

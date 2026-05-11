@@ -56,21 +56,31 @@
             android:letterSpacing="0.08"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <!-- RecyclerView Kartu Informasi (dengan latar melengkung) -->
+    <LinearLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerInformasi"
+        android:background="@drawable/bg_content_rounded"
+        android:orientation="vertical"
+        android:layout_marginTop="-32dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:clipChildren="true"
+        android:clipToPadding="true">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvInformasi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/headerInformasi"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="-32dp"
-        android:background="@drawable/bg_content_rounded"
         android:paddingStart="16dp"
+        android:layout_marginTop="3dp"
         android:paddingEnd="16dp"
         android:paddingTop="24dp"
-        android:paddingBottom="140dp"
+        android:paddingBottom="50dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </LinearLayout>
+    <!-- RecyclerView Kartu Informasi (dengan latar melengkung) -->
 
 </RelativeLayout>

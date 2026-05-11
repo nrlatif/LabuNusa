@@ -207,16 +207,23 @@ class RiwayatFragment : Fragment() {
         val isBukan = entitas.hasilKlasifikasi.contains("Bukan", ignoreCase = true)
         val warnaId = when { isBukan -> com.modul.LabuNusa.R.color.teks_redup; isSehat -> com.modul.LabuNusa.R.color.hijau_primer; else -> com.modul.LabuNusa.R.color.merah_penyakit }
         val warna = androidx.core.content.ContextCompat.getColor(requireContext(), warnaId)
-        tvTagDetail.text = when { isBukan -> "INVALID"; isSehat -> "SEHAT"; else -> "PENYAKIT" }
+        val kategoriTeks = when { isBukan -> "INVALID"; isSehat -> "SEHAT"; else -> "PENYAKIT" }
+        tvTagDetail.text = kategoriTeks
         tvTagDetail.setBackgroundColor(warna)
         tvLabelDetail.setTextColor(warna)
 
+        val fileAnotasi = entitas.lokasiGambarAnotasi?.let { java.io.File(it) }
         val fileGambar = java.io.File(entitas.lokasiGambar)
-        if (fileGambar.exists()) {
-            imgDetail.load(fileGambar) { crossfade(true) }
-            imgDetail.setOnClickListener { tampilkanFotoPenuh(fileGambar) }
-        } else {
-            imgDetail.setImageResource(com.modul.LabuNusa.R.drawable.ic_daun_labu)
+        when {
+            fileAnotasi != null && fileAnotasi.exists() -> {
+                imgDetail.load(fileAnotasi) { crossfade(true) }
+                imgDetail.setOnClickListener { tampilkanFotoPenuh(fileAnotasi) }
+            }
+            fileGambar.exists() -> {
+                imgDetail.load(fileGambar) { crossfade(true) }
+                imgDetail.setOnClickListener { tampilkanFotoPenuh(fileGambar) }
+            }
+            else -> imgDetail.setImageResource(com.modul.LabuNusa.R.drawable.ic_daun_labu)
         }
 
         btnTutupDetail.setOnClickListener { dialog.dismiss() }

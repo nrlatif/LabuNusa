@@ -1,4 +1,4 @@
-﻿package com.modul.LabuNusa.data
+package com.modul.LabuNusa.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -13,5 +13,7 @@ data class EntitasRiwayat(
     @ColumnInfo(name = "jalurGambarLokal")
     val lokasiGambar: String,
     val hasilKlasifikasi: String,
-    val skorAkurasi: Float
+    val skorAkurasi: Float,
+    @ColumnInfo(name = "jalurGambarAnotasi", defaultValue = "")
+    val lokasiGambarAnotasi: String? = null
 )

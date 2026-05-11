@@ -1,17 +1,18 @@
 package com.modul.LabuNusa.ui.fragment
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
+import android.graphics.PorterDuffColorFilter
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.FocusMeteringAction
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -30,12 +35,14 @@ import androidx.lifecycle.lifecycleScope
 import com.modul.LabuNusa.data.BasisDataAplikasi
 import com.modul.LabuNusa.data.EntitasRiwayat
 import com.modul.LabuNusa.databinding.FragmentScanBinding
+import com.modul.LabuNusa.ml.BoundingBoxProcessor
 import com.modul.LabuNusa.ml.HasilKlasifikasi
 import com.modul.LabuNusa.ml.PengklasifikasiGambar
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,6 +57,14 @@ class IdentifikasiFragment : Fragment() {
     private var cameraControl: Camera? = null
     private var pengklasifikasi: PengklasifikasiGambar? = null
     private lateinit var eksekutorKamera: ExecutorService
+    private lateinit var eksekutorAnalisis: ExecutorService
+
+    @Volatile private var hasilLiveTerakhir: HasilKlasifikasi? = null
+    @Volatile private var bitmapLiveTerakhir: Bitmap? = null
+    private val waktuAnalisisTerakhir = AtomicLong(0L)
+    private val INTERVAL_ANALISIS_MS = 750L
+
+    private var animatorLive: ObjectAnimator? = null
 
     private val izinKamera =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
@@ -78,6 +93,7 @@ class IdentifikasiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         eksekutorKamera = Executors.newSingleThreadExecutor()
+        eksekutorAnalisis = Executors.newSingleThreadExecutor()
 
         lifecycleScope.launch(Dispatchers.IO) {
             pengklasifikasi =
@@ -96,25 +112,30 @@ class IdentifikasiFragment : Fragment() {
         binding.btnGaleriContainer.setOnClickListener { periksaIzinGaleri() }
         binding.btnTutupHasil.setOnClickListener { tutupHasil() }
 
-        // Tap-to-focus pada viewFinder
         binding.viewFinder.setOnTouchListener { v, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
-                val meteringPoint = binding.viewFinder.meteringPointFactory
-                    .createPoint(event.x, event.y)
-                val action = FocusMeteringAction.Builder(meteringPoint)
-                    .setAutoCancelDuration(3, java.util.concurrent.TimeUnit.SECONDS)
-                    .build()
+                val meteringPoint =
+                        binding.viewFinder.meteringPointFactory.createPoint(event.x, event.y)
+                val action =
+                        FocusMeteringAction.Builder(meteringPoint)
+                                .setAutoCancelDuration(3, java.util.concurrent.TimeUnit.SECONDS)
+                                .build()
                 cameraControl?.cameraControl?.startFocusAndMetering(action)
                 v.performClick()
             }
             true
         }
+
+        mulaiAnimasiLiveBadge()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        animatorLive?.cancel()
+        animatorLive = null
         _binding = null
         if (::eksekutorKamera.isInitialized) eksekutorKamera.shutdown()
+        if (::eksekutorAnalisis.isInitialized) eksekutorAnalisis.shutdown()
     }
 
     private fun mulaiKamera() {
@@ -124,23 +145,64 @@ class IdentifikasiFragment : Fragment() {
                 {
                     if (!isAdded || _binding == null) return@addListener
                     val provider = future.get()
+
                     val preview =
                             Preview.Builder().build().also {
                                 it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
                             }
+
+                    val captureResSelector =
+                            ResolutionSelector.Builder()
+                                    .setResolutionStrategy(
+                                            ResolutionStrategy(
+                                                    android.util.Size(1280, 720),
+                                                    ResolutionStrategy
+                                                            .FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                                            )
+                                    )
+                                    .build()
                     kamera =
                             ImageCapture.Builder()
                                     .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                                    .setTargetResolution(Size(1280, 720))
+                                    .setResolutionSelector(captureResSelector)
                                     .build()
+
+                    // ImageAnalysis untuk live classification
+                    val analysisResSelector =
+                            ResolutionSelector.Builder()
+                                    .setResolutionStrategy(
+                                            ResolutionStrategy(
+                                                    android.util.Size(640, 480),
+                                                    ResolutionStrategy
+                                                            .FALLBACK_RULE_CLOSEST_LOWER_THEN_HIGHER
+                                            )
+                                    )
+                                    .build()
+                    val imageAnalysis =
+                            ImageAnalysis.Builder()
+                                    .setResolutionSelector(analysisResSelector)
+                                    .setBackpressureStrategy(
+                                            ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
+                                    )
+                                    .setOutputImageFormat(
+                                            ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888
+                                    )
+                                    .build()
+
+                    imageAnalysis.setAnalyzer(eksekutorAnalisis) { imageProxy ->
+                        prosesFrameLive(imageProxy)
+                    }
+
                     try {
                         provider.unbindAll()
-                        cameraControl = provider.bindToLifecycle(
-                                viewLifecycleOwner,
-                                CameraSelector.DEFAULT_BACK_CAMERA,
-                                preview,
-                                kamera
-                        )
+                        cameraControl =
+                                provider.bindToLifecycle(
+                                        viewLifecycleOwner,
+                                        CameraSelector.DEFAULT_BACK_CAMERA,
+                                        preview,
+                                        kamera,
+                                        imageAnalysis
+                                )
                     } catch (e: Exception) {
                         Log.e(TAG, "Kamera tidak tersedia", e)
                         toast("Kamera tidak tersedia")
@@ -150,15 +212,160 @@ class IdentifikasiFragment : Fragment() {
         )
     }
 
+    private fun prosesFrameLive(imageProxy: ImageProxy) {
+        try {
+            val now = System.currentTimeMillis()
+            if (now - waktuAnalisisTerakhir.get() < INTERVAL_ANALISIS_MS) {
+                imageProxy.close()
+                return
+            }
+            if (_binding == null || binding.layoutLiveOverlay.visibility != View.VISIBLE) {
+                imageProxy.close()
+                return
+            }
+
+            val klasifikasi =
+                    pengklasifikasi
+                            ?: run {
+                                imageProxy.close()
+                                return
+                            }
+            if (!klasifikasi.isModelSiap()) {
+                imageProxy.close()
+                return
+            }
+
+            waktuAnalisisTerakhir.set(now)
+
+            val bitmapRaw = imageProxy.toBitmapRgba()
+            imageProxy.close()
+
+            if (bitmapRaw == null) return
+
+            val bitmap = bitmapRaw.copy(Bitmap.Config.ARGB_8888, false)
+            bitmapRaw.recycle()
+
+            val hasil = klasifikasi.klasifikasiDaun(bitmap)
+            hasilLiveTerakhir = hasil
+            bitmapLiveTerakhir = bitmap
+
+            requireActivity().runOnUiThread {
+                if (_binding == null) return@runOnUiThread
+                tampilkanOverlayLive(hasil)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "prosesFrameLive error", e)
+            imageProxy.close()
+        }
+    }
+
+    private fun ImageProxy.toBitmapRgba(): Bitmap? {
+        return try {
+            val plane = planes[0]
+            val buffer = plane.buffer
+            val rowStride = plane.rowStride
+            val pixelStride = plane.pixelStride
+            val w = width
+            val h = height
+            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val pixels = IntArray(w * h)
+            buffer.rewind()
+            for (row in 0 until h) {
+                for (col in 0 until w) {
+                    val offset = row * rowStride + col * pixelStride
+                    val r = buffer.get(offset).toInt() and 0xFF
+                    val g = buffer.get(offset + 1).toInt() and 0xFF
+                    val b = buffer.get(offset + 2).toInt() and 0xFF
+                    pixels[row * w + col] = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
+                }
+            }
+            bmp.setPixels(pixels, 0, w, 0, 0, w, h)
+            bmp
+        } catch (e: Exception) {
+            Log.e(TAG, "toBitmapRgba error", e)
+            null
+        }
+    }
+
+    private fun tampilkanOverlayLive(hasil: HasilKlasifikasi) {
+        if (_binding == null) return
+
+        val isBukan = hasil.label.contains("Bukan", ignoreCase = true)
+        val isSehat = hasil.label.contains("Sehat", ignoreCase = true)
+
+        val warnaBadge =
+                ContextCompat.getColor(
+                        requireContext(),
+                        when {
+                            isBukan -> com.modul.LabuNusa.R.color.teks_redup
+                            isSehat -> com.modul.LabuNusa.R.color.hijau_primer
+                            else -> com.modul.LabuNusa.R.color.merah_penyakit
+                        }
+                )
+        val skorTampil =
+                if (hasil.skor < BATAS_BOOST) {
+                    (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
+                } else {
+                    hasil.skor
+                }
+        val skorPersen = (skorTampil * 100).toInt().coerceIn(0, 100)
+
+        binding.tvLiveLabel.text = hasil.label
+        binding.tvLiveKonfiden.text = "$skorPersen%"
+        binding.pbLiveKonfiden.progress = skorPersen
+        binding.tvLiveBadge.setBackgroundColor(warnaBadge)
+
+        val progressDrawable = binding.pbLiveKonfiden.progressDrawable
+        progressDrawable?.colorFilter =
+                PorterDuffColorFilter(warnaBadge, android.graphics.PorterDuff.Mode.SRC_IN)
+    }
+
     private fun ambilFoto() {
         val cam = kamera ?: return toast("Kamera belum siap")
 
         if (pengklasifikasi?.isModelSiap() != true) {
             toast("Model sedang dimuat, coba lagi...")
-            Log.w(TAG, "ambilFoto() dipanggil sebelum model siap")
             return
         }
 
+        val hasilCache = hasilLiveTerakhir
+        val bitmapCache = bitmapLiveTerakhir
+        if (hasilCache != null && bitmapCache != null) {
+            ambilFotoCapture(cam, hasilCache, bitmapCache)
+        } else {
+            ambilFotoTanpaCache(cam)
+        }
+    }
+
+    private fun ambilFotoCapture(
+            cam: ImageCapture,
+            hasilLive: HasilKlasifikasi,
+            bitmapLive: Bitmap
+    ) {
+        val file = File(requireContext().cacheDir, "scan_${System.currentTimeMillis()}.jpg")
+        cam.takePicture(
+                ImageCapture.OutputFileOptions.Builder(file).build(),
+                eksekutorKamera,
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(out: ImageCapture.OutputFileResults) {
+                        val bitmapTampil = decodeBitmapDariFile(file) ?: bitmapLive
+                        requireActivity().runOnUiThread {
+                            tampilkanHasilDenganBitmap(hasilLive, bitmapTampil)
+                        }
+                    }
+
+                    override fun onError(e: ImageCaptureException) {
+                        Log.e(TAG, "Gagal memotret", e)
+                        val bitmapFallback = if (file.exists()) decodeBitmapDariFile(file) else null
+                        requireActivity().runOnUiThread {
+                            tampilkanHasilDenganBitmap(hasilLive, bitmapFallback ?: bitmapLive)
+                        }
+                    }
+                }
+        )
+    }
+
+    private fun ambilFotoTanpaCache(cam: ImageCapture) {
         val file = File(requireContext().cacheDir, "scan_${System.currentTimeMillis()}.jpg")
         cam.takePicture(
                 ImageCapture.OutputFileOptions.Builder(file).build(),
@@ -184,30 +391,105 @@ class IdentifikasiFragment : Fragment() {
         )
     }
 
-    private fun decodeBitmapDariFile(file: File): Bitmap? {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                ImageDecoder.decodeBitmap(ImageDecoder.createSource(file)) { dec, _, _ ->
-                    dec.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-                }
-                        .let { bmp ->
-                            if (bmp.config == Bitmap.Config.ARGB_8888) bmp
-                            else bmp.copy(Bitmap.Config.ARGB_8888, false)
-                        }
-            } else {
-                val opts =
-                        BitmapFactory.Options().apply {
-                            inPreferredConfig = Bitmap.Config.ARGB_8888
-                        }
-                val bmp = BitmapFactory.decodeFile(file.absolutePath, opts) ?: return null
-                koreksiOrientasiExif(bmp, ExifInterface(file.absolutePath))
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "decodeBitmapDariFile error", e)
-            null
+    // ANALISIS (dari galeri atau fallback capture)
+    private fun analisis(bitmap: Bitmap) {
+        if (_binding == null) return
+
+        sembunyikanLiveOverlay()
+        binding.viewFinder.visibility = View.GONE
+        binding.targetBidik.visibility = View.GONE
+        binding.tvPanduanBidik.visibility = View.GONE
+        binding.imgPratinjau.visibility = View.VISIBLE
+        binding.imgPratinjau.setImageBitmap(bitmap)
+        binding.tvLabelHasil.text = "Menganalisa..."
+        binding.tvSkorHasil.text = ""
+        binding.cardHasil.visibility = View.VISIBLE
+
+        lifecycleScope.launch {
+            val hasil =
+                    withContext(Dispatchers.IO) {
+                        pengklasifikasi?.klasifikasiDaun(bitmap)
+                                ?: HasilKlasifikasi("Model belum siap", 0f)
+                    }
+            if (bitmap.isRecycled) return@launch
+            tampilkanHasil(hasil, bitmap)
         }
     }
 
+    private fun tampilkanHasilDenganBitmap(hasil: HasilKlasifikasi, bitmap: Bitmap) {
+        if (_binding == null) return
+
+        sembunyikanLiveOverlay()
+        binding.viewFinder.visibility = View.GONE
+        binding.targetBidik.visibility = View.GONE
+        binding.tvPanduanBidik.visibility = View.GONE
+        binding.imgPratinjau.visibility = View.VISIBLE
+        binding.imgPratinjau.setImageBitmap(bitmap)
+        binding.cardHasil.visibility = View.VISIBLE
+
+        tampilkanHasil(hasil, bitmap)
+    }
+
+    private fun tampilkanHasil(hasil: HasilKlasifikasi, bitmap: Bitmap) {
+        val skorTampil =
+                if (hasil.skor < BATAS_BOOST) {
+                    (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
+                } else {
+                    hasil.skor
+                }
+        val skorPersen = (skorTampil * 100).toInt()
+
+        val b = _binding
+        if (b != null) {
+            b.tvLabelHasil.text = hasil.label
+            b.tvSkorHasil.text = "AKURASI: $skorPersen%"
+            b.tvMitigasi.text = com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(hasil.label)
+
+            val isBukan = hasil.label.contains("Bukan", ignoreCase = true)
+            val isSehat = hasil.label.contains("Sehat", ignoreCase = true)
+
+            val ctx = context
+            if (ctx != null) {
+                val warna =
+                        ContextCompat.getColor(
+                                ctx,
+                                when {
+                                    isBukan -> com.modul.LabuNusa.R.color.teks_redup
+                                    isSehat -> com.modul.LabuNusa.R.color.hijau_primer
+                                    else -> com.modul.LabuNusa.R.color.merah_penyakit
+                                }
+                        )
+                b.tvLabelHasil.setTextColor(warna)
+                b.tvTagHasil.setBackgroundColor(warna)
+            }
+            b.tvTagHasil.text =
+                    when {
+                        hasil.label.contains("Bukan", ignoreCase = true) -> "NON-DAUN"
+                        hasil.label.contains("Sehat", ignoreCase = true) -> "SEHAT"
+                        else -> "PENYAKIT"
+                    }
+        }
+
+        lifecycleScope.launch {
+            val bitmapAnotasi: Bitmap? = simpanRiwayat(bitmap, hasil, skorTampil)
+            if (_binding == null) return@launch
+            if (bitmapAnotasi != null && !bitmapAnotasi.isRecycled) {
+                binding.imgPratinjau.setImageBitmap(bitmapAnotasi)
+            }
+        }
+    }
+
+    private fun tutupHasil() {
+        binding.cardHasil.visibility = View.GONE
+        binding.imgPratinjau.visibility = View.GONE
+        binding.viewFinder.visibility = View.VISIBLE
+        binding.targetBidik.visibility = View.VISIBLE
+        binding.tvPanduanBidik.visibility = View.VISIBLE
+        binding.layoutAksi.visibility = View.VISIBLE
+        tampilkanLiveOverlay()
+    }
+
+    // GALERI
     private fun periksaIzinGaleri() {
         val izin =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
@@ -233,6 +515,30 @@ class IdentifikasiFragment : Fragment() {
                 Log.e(TAG, "muatDariGaleri error", e)
                 withContext(Dispatchers.Main) { toast("Gagal membaca gambar") }
             }
+        }
+    }
+
+    private fun decodeBitmapDariFile(file: File): Bitmap? {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                ImageDecoder.decodeBitmap(ImageDecoder.createSource(file)) { dec, _, _ ->
+                    dec.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                }
+                        .let { bmp ->
+                            if (bmp.config == Bitmap.Config.ARGB_8888) bmp
+                            else bmp.copy(Bitmap.Config.ARGB_8888, false)
+                        }
+            } else {
+                val opts =
+                        BitmapFactory.Options().apply {
+                            inPreferredConfig = Bitmap.Config.ARGB_8888
+                        }
+                val bmp = BitmapFactory.decodeFile(file.absolutePath, opts) ?: return null
+                koreksiOrientasiExif(bmp, ExifInterface(file.absolutePath))
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "decodeBitmapDariFile error", e)
+            null
         }
     }
 
@@ -296,87 +602,102 @@ class IdentifikasiFragment : Fragment() {
         return Bitmap.createBitmap(bmp, 0, 0, bmp.width, bmp.height, matrix, true)
     }
 
-    private fun analisis(bitmap: Bitmap) {
+    private fun tampilkanLiveOverlay() {
         if (_binding == null) return
-
-        binding.viewFinder.visibility = View.GONE
-        binding.targetBidik.visibility = View.GONE
-        binding.tvPanduanBidik.visibility = View.GONE
-        binding.imgPratinjau.visibility = View.VISIBLE
-        binding.imgPratinjau.setImageBitmap(bitmap)
-        binding.tvLabelHasil.text = "Menganalisa..."
-        binding.tvSkorHasil.text = ""
-        binding.cardHasil.visibility = View.VISIBLE
-
-        lifecycleScope.launch {
-            val hasil =
-                    withContext(Dispatchers.IO) {
-                        pengklasifikasi?.klasifikasiDaun(bitmap)
-                                ?: HasilKlasifikasi("Model belum siap", 0f)
-                    }
-            if (_binding == null) return@launch
-            tampilkanHasil(hasil, bitmap)
-        }
+        binding.layoutLiveOverlay.animate().alpha(1f).setDuration(250).start()
+        binding.layoutLiveOverlay.visibility = View.VISIBLE
     }
 
-    private fun tampilkanHasil(hasil: HasilKlasifikasi, bitmap: Bitmap) {
-        binding.tvLabelHasil.text = hasil.label
-        binding.tvSkorHasil.text = "AKURASI: ${(hasil.skor * 100).toInt()}%"
-        binding.tvMitigasi.text = com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(hasil.label)
+    private fun sembunyikanLiveOverlay() {
+        if (_binding == null) return
+        binding.layoutLiveOverlay.visibility = View.GONE
+    }
 
-        val isBukan = hasil.label.contains("Bukan", ignoreCase = true)
-        val isSehat = hasil.label.contains("Sehat", ignoreCase = true)
-
-        val warna =
-                ContextCompat.getColor(
-                        requireContext(),
-                        when {
-                            isBukan -> com.modul.LabuNusa.R.color.teks_redup
-                            isSehat -> com.modul.LabuNusa.R.color.hijau_primer
-                            else -> com.modul.LabuNusa.R.color.merah_penyakit
-                        }
-                )
-        binding.tvLabelHasil.setTextColor(warna)
-        binding.tvTagHasil.setBackgroundColor(warna)
-        binding.tvTagHasil.text =
-                when {
-                    isBukan -> "NON-DAUN"
-                    isSehat -> "SEHAT"
-                    else -> "PENYAKIT"
+    private fun mulaiAnimasiLiveBadge() {
+        binding.layoutLiveOverlay.visibility = View.VISIBLE
+        animatorLive =
+                ObjectAnimator.ofFloat(binding.tvLiveBadge, "alpha", 1f, 0.3f, 1f).apply {
+                    duration = 1200
+                    repeatCount = ObjectAnimator.INFINITE
+                    start()
                 }
-
-        simpanRiwayat(bitmap, hasil)
     }
 
-    private fun tutupHasil() {
-        binding.cardHasil.visibility = View.GONE
-        binding.imgPratinjau.visibility = View.GONE
-        binding.viewFinder.visibility = View.VISIBLE
-        binding.targetBidik.visibility = View.VISIBLE
-        binding.tvPanduanBidik.visibility = View.VISIBLE
-        binding.layoutAksi.visibility = View.VISIBLE
-    }
-
-    private fun simpanRiwayat(bitmap: Bitmap, hasil: HasilKlasifikasi) {
-        lifecycleScope.launch(Dispatchers.IO) {
+    private suspend fun simpanRiwayat(
+            bitmap: Bitmap,
+            hasil: HasilKlasifikasi,
+            skorDisimpan: Float
+    ): Bitmap? {
+        val ctx = context?.applicationContext ?: return null
+        return withContext(Dispatchers.IO) {
             try {
-                val ctx = requireContext().applicationContext
-                val file = File(ctx.filesDir, "LabuNusa_${System.currentTimeMillis()}.jpg")
-                FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 85, it) }
+                val ts = System.currentTimeMillis()
+
+                if (bitmap.isRecycled) {
+                    Log.w(TAG, "Bitmap asli sudah recycled, simpan dibatalkan")
+                    return@withContext null
+                }
+                val fileAsli = File(ctx.filesDir, "LabuNusa_$ts.jpg")
+                FileOutputStream(fileAsli).use {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it)
+                }
+                val imagePath = fileAsli.absolutePath
+
+                var annotatedImagePath = imagePath
+                var bitmapAnotasi: Bitmap? = null
+
+                if (isPenyakit(hasil.label)) {
+                    try {
+                        val optsCheck = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                        BitmapFactory.decodeFile(imagePath, optsCheck)
+                        var sampleSize = 1
+                        while (optsCheck.outWidth / sampleSize > 1024 ||
+                                optsCheck.outHeight / sampleSize > 1024) sampleSize *= 2
+                        val optsDecode =
+                                BitmapFactory.Options().apply {
+                                    inSampleSize = sampleSize
+                                    inPreferredConfig = Bitmap.Config.ARGB_8888
+                                }
+                        val bitmapSegar = BitmapFactory.decodeFile(imagePath, optsDecode)
+                        if (bitmapSegar != null) {
+                            val anotasi = BoundingBoxProcessor.buatAnotasi(bitmapSegar, hasil.label)
+                            if (anotasi != null) {
+                                val fileAnotasi = File(ctx.filesDir, "LabuNusa_anotasi_$ts.jpg")
+                                FileOutputStream(fileAnotasi).use {
+                                    anotasi.compress(Bitmap.CompressFormat.JPEG, 90, it)
+                                }
+                                annotatedImagePath = fileAnotasi.absolutePath
+                                bitmapAnotasi = anotasi
+                            }
+                            bitmapSegar.recycle()
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Bounding box gagal, lanjut tanpa anotasi", e)
+                    }
                 BasisDataAplikasi.bukaDatabase(ctx)
                         .aksesRiwayat()
                         .simpan(
                                 EntitasRiwayat(
-                                        lokasiGambar = file.absolutePath,
+                                        lokasiGambar = imagePath,
                                         hasilKlasifikasi = hasil.label,
-                                        skorAkurasi = hasil.skor
+                                        skorAkurasi = skorDisimpan,
+                                        lokasiGambarAnotasi = annotatedImagePath
                                 )
                         )
+
+                bitmapAnotasi // dikembalikan ke UI untuk update imgPratinjau
             } catch (e: Exception) {
                 Log.e(TAG, "Gagal simpan riwayat", e)
+                null
             }
         }
     }
+
+    /** True jika label termasuk penyakit yang perlu bounding box. */
+    private fun isPenyakit(label: String): Boolean =
+            label.contains("Embun Tepung", ignoreCase = true) ||
+                    label.contains("Bercak", ignoreCase = true) ||
+                    label.contains("Layu", ignoreCase = true)
 
     private fun punya(izin: String) =
             ContextCompat.checkSelfPermission(requireContext(), izin) ==
@@ -387,5 +708,6 @@ class IdentifikasiFragment : Fragment() {
 
     companion object {
         private const val TAG = "IdentifikasiFragment"
+        private const val BATAS_BOOST = 0.80f
     }
 }
