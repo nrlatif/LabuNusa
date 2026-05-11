@@ -674,6 +674,8 @@ class IdentifikasiFragment : Fragment() {
                     } catch (e: Exception) {
                         Log.w(TAG, "Bounding box gagal, lanjut tanpa anotasi", e)
                     }
+                }
+
                 BasisDataAplikasi.bukaDatabase(ctx)
                         .aksesRiwayat()
                         .simpan(
@@ -685,7 +687,7 @@ class IdentifikasiFragment : Fragment() {
                                 )
                         )
 
-                bitmapAnotasi // dikembalikan ke UI untuk update imgPratinjau
+                bitmapAnotasi
             } catch (e: Exception) {
                 Log.e(TAG, "Gagal simpan riwayat", e)
                 null
