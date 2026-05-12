@@ -25,17 +25,19 @@ class PengklasifikasiGambar(private val konteks: Context) {
         try {
             val fd = konteks.assets.openFd(MODEL_FILE)
             val channel = FileInputStream(fd.fileDescriptor).channel
-            val buffer = channel.map(FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.declaredLength)
+            val buffer =
+                    channel.map(FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.declaredLength)
             channel.close()
 
             interpreter = Interpreter(buffer, Interpreter.Options().apply { numThreads = 2 })
 
-            labels = konteks.assets
-                .open(LABELS_FILE)
-                .bufferedReader()
-                .readLines()
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
+            labels =
+                    konteks.assets
+                            .open(LABELS_FILE)
+                            .bufferedReader()
+                            .readLines()
+                            .map { it.trim() }
+                            .filter { it.isNotEmpty() }
 
             modelSiap.set(true)
         } catch (e: Exception) {
@@ -59,24 +61,25 @@ class PengklasifikasiGambar(private val konteks: Context) {
             val W = INPUT_SIZE
             val H = INPUT_SIZE
             val scaled = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888)
-            Canvas(scaled).drawBitmap(
-                src,
-                Rect(0, 0, src.width, src.height),
-                Rect(0, 0, W, H),
-                Paint(Paint.FILTER_BITMAP_FLAG)
-            )
+            Canvas(scaled)
+                    .drawBitmap(
+                            src,
+                            Rect(0, 0, src.width, src.height),
+                            Rect(0, 0, W, H),
+                            Paint(Paint.FILTER_BITMAP_FLAG)
+                    )
 
             val pixels = IntArray(W * H)
             scaled.getPixels(pixels, 0, W, 0, 0, W, H)
 
-            val buf = ByteBuffer
-                .allocateDirect(1 * W * H * 3 * Float.SIZE_BYTES)
-                .order(ByteOrder.nativeOrder())
+            val buf =
+                    ByteBuffer.allocateDirect(1 * W * H * 3 * Float.SIZE_BYTES)
+                            .order(ByteOrder.nativeOrder())
 
             for (px in pixels) {
                 buf.putFloat(((px shr 16) and 0xFF).toFloat())
-                buf.putFloat(((px shr  8) and 0xFF).toFloat())
-                buf.putFloat(( px         and 0xFF).toFloat())
+                buf.putFloat(((px shr 8) and 0xFF).toFloat())
+                buf.putFloat((px and 0xFF).toFloat())
             }
             buf.rewind()
 
@@ -85,10 +88,14 @@ class PengklasifikasiGambar(private val konteks: Context) {
             interpreter!!.run(buf, out)
             val scores = out[0]
 
-            val maxIdx   = scores.indices.maxByOrNull { scores[it] } ?: 0
+            val maxIdx = scores.indices.maxByOrNull { scores[it] } ?: 0
             val maxScore = scores[maxIdx]
-            val rawLabel = labels.getOrElse(maxIdx) { "Tidak Dikenali" }
 
+            if (maxScore < THRESHOLD_DAUN) {
+                return HasilKlasifikasi("Tidak Teridentifikasi", maxScore.coerceIn(0f, 1f))
+            }
+
+            val rawLabel = labels.getOrElse(maxIdx) { "Tidak Dikenali" }
             HasilKlasifikasi(rawLabel.replace("_", " "), maxScore.coerceIn(0f, 1f))
         } catch (e: Exception) {
             Log.e(TAG, "Error saat inference", e)
@@ -99,9 +106,10 @@ class PengklasifikasiGambar(private val konteks: Context) {
     fun isModelSiap(): Boolean = modelSiap.get()
 
     companion object {
-        private const val TAG         = "Pengklasifikasi"
-        private const val MODEL_FILE  = "mobilenetv2_labuV2_float32V3.tflite"
+        private const val TAG = "Pengklasifikasi"
+        private const val MODEL_FILE = "mobilenetv2_labuV3_float32V5.tflite"
         private const val LABELS_FILE = "labels.txt"
-        private const val INPUT_SIZE  = 224
+        private const val INPUT_SIZE = 224
+        const val THRESHOLD_DAUN = 0.7f
     }
 }

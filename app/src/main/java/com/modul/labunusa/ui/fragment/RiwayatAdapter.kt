@@ -59,7 +59,7 @@ class RiwayatAdapter(
             val isBukan = entitas.hasilKlasifikasi.contains("Bukan", ignoreCase = true)
 
             binding.tvHasilRiwayat.text = entitas.hasilKlasifikasi
-            binding.tvSkorRiwayat.text = "Akurasi: ${(entitas.skorAkurasi * 100).toInt()}%"
+            binding.tvSkorRiwayat.text = "Kepercayaan: ${(entitas.skorAkurasi * 100).toInt()}%"
             val format = SimpleDateFormat("dd MMM yyyy • HH:mm", Locale("id", "ID"))
             binding.tvWaktuRiwayat.text = format.format(Date(entitas.waktuScan))
 

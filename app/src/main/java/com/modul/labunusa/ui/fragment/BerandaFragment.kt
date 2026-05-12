@@ -201,7 +201,7 @@ class BerandaFragment : Fragment() {
         val format = java.text.SimpleDateFormat("dd MMM yyyy • HH:mm", java.util.Locale("id", "ID"))
         tvWaktuDetail.text = format.format(java.util.Date(entitas.waktuScan))
         tvLabelDetail.text = entitas.hasilKlasifikasi
-        tvSkorDetail.text = "Akurasi: ${(entitas.skorAkurasi * 100).toInt()}%"
+        tvSkorDetail.text = "Kepercayaan: ${(entitas.skorAkurasi * 100).toInt()}%"
         tvMitigasi.text =
                 com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(entitas.hasilKlasifikasi)
 

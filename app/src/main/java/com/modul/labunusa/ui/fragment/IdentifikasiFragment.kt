@@ -290,7 +290,7 @@ class IdentifikasiFragment : Fragment() {
     private fun tampilkanOverlayLive(hasil: HasilKlasifikasi) {
         if (_binding == null) return
 
-        val isBukan = hasil.label.contains("Bukan", ignoreCase = true)
+        val isBukan = hasil.label.equals("Tidak Teridentifikasi", ignoreCase = true)
         val isSehat = hasil.label.contains("Sehat", ignoreCase = true)
 
         val warnaBadge =
@@ -302,8 +302,12 @@ class IdentifikasiFragment : Fragment() {
                             else -> com.modul.LabuNusa.R.color.merah_penyakit
                         }
                 )
+
+        // Bukan daun: tampil skor raw (rendah) agar threshold terlihat jelas
         val skorTampil =
-                if (hasil.skor < BATAS_BOOST) {
+                if (isBukan) {
+                    hasil.skor
+                } else if (hasil.skor < BATAS_BOOST) {
                     (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
                 } else {
                     hasil.skor
@@ -431,8 +435,11 @@ class IdentifikasiFragment : Fragment() {
     }
 
     private fun tampilkanHasil(hasil: HasilKlasifikasi, bitmap: Bitmap) {
+        val isBukan = hasil.label.equals("Tidak Teridentifikasi", ignoreCase = true)
         val skorTampil =
-                if (hasil.skor < BATAS_BOOST) {
+                if (isBukan) {
+                    hasil.skor
+                } else if (hasil.skor < BATAS_BOOST) {
                     (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
                 } else {
                     hasil.skor
@@ -442,10 +449,14 @@ class IdentifikasiFragment : Fragment() {
         val b = _binding
         if (b != null) {
             b.tvLabelHasil.text = hasil.label
-            b.tvSkorHasil.text = "AKURASI: $skorPersen%"
+            if (isBukan) {
+                b.tvSkorHasil.visibility = View.GONE
+            } else {
+                b.tvSkorHasil.visibility = View.VISIBLE
+                b.tvSkorHasil.text = "KEPERCAYAAN: $skorPersen%"
+            }
             b.tvMitigasi.text = com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(hasil.label)
 
-            val isBukan = hasil.label.contains("Bukan", ignoreCase = true)
             val isSehat = hasil.label.contains("Sehat", ignoreCase = true)
 
             val ctx = context
@@ -464,11 +475,14 @@ class IdentifikasiFragment : Fragment() {
             }
             b.tvTagHasil.text =
                     when {
-                        hasil.label.contains("Bukan", ignoreCase = true) -> "NON-DAUN"
+                        isBukan -> "NON-DAUN"
                         hasil.label.contains("Sehat", ignoreCase = true) -> "SEHAT"
                         else -> "PENYAKIT"
                     }
         }
+
+        // Jangan simpan riwayat jika bukan daun
+        if (isBukan) return
 
         lifecycleScope.launch {
             val bitmapAnotasi: Bitmap? = simpanRiwayat(bitmap, hasil, skorTampil)
@@ -710,6 +724,6 @@ class IdentifikasiFragment : Fragment() {
 
     companion object {
         private const val TAG = "IdentifikasiFragment"
-        private const val BATAS_BOOST = 0.80f
+        private const val BATAS_BOOST = 0.70f
     }
 }
