@@ -35,7 +35,6 @@ import androidx.lifecycle.lifecycleScope
 import com.modul.LabuNusa.data.BasisDataAplikasi
 import com.modul.LabuNusa.data.EntitasRiwayat
 import com.modul.LabuNusa.databinding.FragmentScanBinding
-import com.modul.LabuNusa.ml.BoundingBoxProcessor
 import com.modul.LabuNusa.ml.HasilKlasifikasi
 import com.modul.LabuNusa.ml.PengklasifikasiGambar
 import java.io.File
@@ -303,25 +302,32 @@ class IdentifikasiFragment : Fragment() {
                         }
                 )
 
-        // Bukan daun: tampil skor raw (rendah) agar threshold terlihat jelas
-        val skorTampil =
-                if (isBukan) {
-                    hasil.skor
-                } else if (hasil.skor < BATAS_BOOST) {
-                    (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
-                } else {
-                    hasil.skor
-                }
-        val skorPersen = (skorTampil * 100).toInt().coerceIn(0, 100)
-
         binding.tvLiveLabel.text = hasil.label
-        binding.tvLiveKonfiden.text = "$skorPersen%"
-        binding.pbLiveKonfiden.progress = skorPersen
         binding.tvLiveBadge.setBackgroundColor(warnaBadge)
 
-        val progressDrawable = binding.pbLiveKonfiden.progressDrawable
-        progressDrawable?.colorFilter =
-                PorterDuffColorFilter(warnaBadge, android.graphics.PorterDuff.Mode.SRC_IN)
+        if (isBukan) {
+            // Sembunyikan confidence: tidak relevan untuk objek non-daun
+            binding.tvLiveKonfiden.visibility = View.GONE
+            binding.pbLiveKonfiden.visibility = View.GONE
+        } else {
+            binding.tvLiveKonfiden.visibility = View.VISIBLE
+            binding.pbLiveKonfiden.visibility = View.VISIBLE
+
+            val skorTampil =
+                    if (hasil.skor < BATAS_BOOST) {
+                        (0.80f + (hasil.skor / BATAS_BOOST) * 0.09f).coerceIn(0.80f, 0.89f)
+                    } else {
+                        hasil.skor
+                    }
+            val skorPersen = (skorTampil * 100).toInt().coerceIn(0, 100)
+
+            binding.tvLiveKonfiden.text = "$skorPersen%"
+            binding.pbLiveKonfiden.progress = skorPersen
+
+            val progressDrawable = binding.pbLiveKonfiden.progressDrawable
+            progressDrawable?.colorFilter =
+                    PorterDuffColorFilter(warnaBadge, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
     }
 
     private fun ambilFoto() {
@@ -485,11 +491,7 @@ class IdentifikasiFragment : Fragment() {
         if (isBukan) return
 
         lifecycleScope.launch {
-            val bitmapAnotasi: Bitmap? = simpanRiwayat(bitmap, hasil, skorTampil)
-            if (_binding == null) return@launch
-            if (bitmapAnotasi != null && !bitmapAnotasi.isRecycled) {
-                binding.imgPratinjau.setImageBitmap(bitmapAnotasi)
-            }
+            simpanRiwayat(bitmap, hasil, skorTampil)
         }
     }
 
@@ -641,15 +643,15 @@ class IdentifikasiFragment : Fragment() {
             bitmap: Bitmap,
             hasil: HasilKlasifikasi,
             skorDisimpan: Float
-    ): Bitmap? {
-        val ctx = context?.applicationContext ?: return null
-        return withContext(Dispatchers.IO) {
+    ) {
+        val ctx = context?.applicationContext ?: return
+        withContext(Dispatchers.IO) {
             try {
                 val ts = System.currentTimeMillis()
 
                 if (bitmap.isRecycled) {
                     Log.w(TAG, "Bitmap asli sudah recycled, simpan dibatalkan")
-                    return@withContext null
+                    return@withContext
                 }
                 val fileAsli = File(ctx.filesDir, "LabuNusa_$ts.jpg")
                 FileOutputStream(fileAsli).use {
@@ -657,63 +659,21 @@ class IdentifikasiFragment : Fragment() {
                 }
                 val imagePath = fileAsli.absolutePath
 
-                var annotatedImagePath = imagePath
-                var bitmapAnotasi: Bitmap? = null
-
-                if (isPenyakit(hasil.label)) {
-                    try {
-                        val optsCheck = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                        BitmapFactory.decodeFile(imagePath, optsCheck)
-                        var sampleSize = 1
-                        while (optsCheck.outWidth / sampleSize > 1024 ||
-                                optsCheck.outHeight / sampleSize > 1024) sampleSize *= 2
-                        val optsDecode =
-                                BitmapFactory.Options().apply {
-                                    inSampleSize = sampleSize
-                                    inPreferredConfig = Bitmap.Config.ARGB_8888
-                                }
-                        val bitmapSegar = BitmapFactory.decodeFile(imagePath, optsDecode)
-                        if (bitmapSegar != null) {
-                            val anotasi = BoundingBoxProcessor.buatAnotasi(bitmapSegar, hasil.label)
-                            if (anotasi != null) {
-                                val fileAnotasi = File(ctx.filesDir, "LabuNusa_anotasi_$ts.jpg")
-                                FileOutputStream(fileAnotasi).use {
-                                    anotasi.compress(Bitmap.CompressFormat.JPEG, 90, it)
-                                }
-                                annotatedImagePath = fileAnotasi.absolutePath
-                                bitmapAnotasi = anotasi
-                            }
-                            bitmapSegar.recycle()
-                        }
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Bounding box gagal, lanjut tanpa anotasi", e)
-                    }
-                }
-
                 BasisDataAplikasi.bukaDatabase(ctx)
                         .aksesRiwayat()
                         .simpan(
                                 EntitasRiwayat(
                                         lokasiGambar = imagePath,
                                         hasilKlasifikasi = hasil.label,
-                                        skorAkurasi = skorDisimpan,
-                                        lokasiGambarAnotasi = annotatedImagePath
+                                        skorAkurasi = skorDisimpan
                                 )
                         )
-
-                bitmapAnotasi
             } catch (e: Exception) {
                 Log.e(TAG, "Gagal simpan riwayat", e)
-                null
             }
         }
     }
 
-    /** True jika label termasuk penyakit yang perlu bounding box. */
-    private fun isPenyakit(label: String): Boolean =
-            label.contains("Embun Tepung", ignoreCase = true) ||
-                    label.contains("Bercak", ignoreCase = true) ||
-                    label.contains("Layu", ignoreCase = true)
 
     private fun punya(izin: String) =
             ContextCompat.checkSelfPermission(requireContext(), izin) ==

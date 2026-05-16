@@ -55,6 +55,11 @@ class PengklasifikasiGambar(private val konteks: Context) {
             return HasilKlasifikasi("Labels kosong", 0f)
         }
 
+        // Pre-screening: tolak jika gambar tidak dominan hijau (bukan daun)
+        if (!adaWarnaDaunDominan(bitmap)) {
+            return HasilKlasifikasi("Tidak Teridentifikasi", 0f)
+        }
+
         return try {
             val src = bitmap.copy(Bitmap.Config.ARGB_8888, false)
 
@@ -103,13 +108,49 @@ class PengklasifikasiGambar(private val konteks: Context) {
         }
     }
 
+    private fun adaWarnaDaunDominan(bitmap: Bitmap): Boolean {
+        val S = 64
+        val sampled = Bitmap.createScaledBitmap(bitmap, S, S, false)
+        val pixels = IntArray(S * S)
+        sampled.getPixels(pixels, 0, S, 0, 0, S, S)
+        sampled.recycle()
+
+        val hsv = FloatArray(3)
+        var hijauCount = 0
+        val nilaiHijau = FloatArray(pixels.size)
+
+        for (i in pixels.indices) {
+            val px = pixels[i]
+            val r = (px shr 16) and 0xFF
+            val g = (px shr 8) and 0xFF
+            val b = px and 0xFF
+            android.graphics.Color.RGBToHSV(r, g, b, hsv)
+            val h = hsv[0]
+            val s = hsv[1]
+            val v = hsv[2]
+            nilaiHijau[i] = v
+            if (h in 55f..175f && s > 0.15f && v > 0.10f) hijauCount++
+        }
+
+        val rasio = hijauCount.toFloat() / pixels.size
+        if (rasio < MIN_RASIO_HIJAU) return false
+
+        val mean = nilaiHijau.average().toFloat()
+        val variance = nilaiHijau.map { (it - mean) * (it - mean) }.average().toFloat()
+        if (variance < MIN_VARIANCE_TEKSTUR) return false
+
+        return true
+    }
+
     fun isModelSiap(): Boolean = modelSiap.get()
 
     companion object {
         private const val TAG = "Pengklasifikasi"
-        private const val MODEL_FILE = "mobilenetv2_labuV3_float32V5.tflite"
+        private const val MODEL_FILE = "mobilenetv2_labu_float32.tflite"
         private const val LABELS_FILE = "labels.txt"
         private const val INPUT_SIZE = 224
-        const val THRESHOLD_DAUN = 0.7f
+        const val THRESHOLD_DAUN = 0.70f
+        private const val MIN_RASIO_HIJAU = 0.15f
+        private const val MIN_VARIANCE_TEKSTUR = 0.003f
     }
 }
