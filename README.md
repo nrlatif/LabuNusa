@@ -11,7 +11,7 @@ Aplikasi Android berbasis Machine Learning untuk melakukan klasifikasi dan detek
 
 ## 📌 Ringkasan Project
 
-**LabuNusa** (atau **LabuKu**) adalah aplikasi mobile Android yang memanfaatkan model Machine Learning **MobileNetV2** yang dikonversi ke format **TensorFlow Lite (TFLite)** (`mobilenetv2_labuV2_float32_final.tflite`). Aplikasi ini dirancang untuk mendeteksi penyakit daun tanaman labu secara lokal (*on-device inference*) tanpa memerlukan koneksi internet aktif.
+**LabuNusa** adalah aplikasi mobile Android yang memanfaatkan model Machine Learning **MobileNetV2** yang dikonversi ke format **TensorFlow Lite (TFLite)** (`mobilenetv2_labuV2_float32_final.tflite`). Aplikasi ini dirancang untuk mendeteksi penyakit daun tanaman labu secara lokal (*on-device inference*) tanpa memerlukan koneksi internet aktif.
 
 ### Fitur Utama:
 * **Deteksi Real-Time**: Menggunakan kamera perangkat (ditenagai oleh Android CameraX) untuk menangkap gambar daun dan mendeteksi kondisi kesehatan daun secara langsung.
