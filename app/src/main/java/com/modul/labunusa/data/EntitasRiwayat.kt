@@ -13,7 +13,7 @@ data class EntitasRiwayat(
     @ColumnInfo(name = "jalurGambarLokal")
     val lokasiGambar: String,
     val hasilKlasifikasi: String,
-    val skorAkurasi: Float,
+    val skorKepercayaan: Float,
     @ColumnInfo(name = "jalurGambarAnotasi", defaultValue = "")
     val lokasiGambarAnotasi: String? = null
 )

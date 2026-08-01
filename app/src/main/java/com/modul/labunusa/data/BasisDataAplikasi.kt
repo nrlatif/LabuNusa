@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [EntitasRiwayat::class], version = 3, exportSchema = false)
+@Database(entities = [EntitasRiwayat::class], version = 4, exportSchema = false)
 abstract class BasisDataAplikasi : RoomDatabase() {
 
     abstract fun aksesRiwayat(): DaoRiwayat
@@ -16,15 +16,14 @@ abstract class BasisDataAplikasi : RoomDatabase() {
 
         fun bukaDatabase(konteks: Context): BasisDataAplikasi {
             return INSTANCE ?: synchronized(this) {
-                val instansi = Room.databaseBuilder(
+                INSTANCE ?: Room.databaseBuilder(
                     konteks.applicationContext,
                     BasisDataAplikasi::class.java,
                     "basis_data_LabuNusa"
                 )
                 .fallbackToDestructiveMigration()
                 .build()
-                INSTANCE = instansi
-                instansi
+                .also { INSTANCE = it }
             }
         }
     }

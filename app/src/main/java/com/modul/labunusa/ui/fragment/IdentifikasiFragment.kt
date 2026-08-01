@@ -54,6 +54,7 @@ class IdentifikasiFragment : Fragment() {
 
     private var kamera: ImageCapture? = null
     private var cameraControl: Camera? = null
+    private var isFlashOn = false
     private var pengklasifikasi: PengklasifikasiGambar? = null
     private lateinit var eksekutorKamera: ExecutorService
     private lateinit var eksekutorAnalisis: ExecutorService
@@ -110,6 +111,8 @@ class IdentifikasiFragment : Fragment() {
         binding.btnGaleri.setOnClickListener { periksaIzinGaleri() }
         binding.btnGaleriContainer.setOnClickListener { periksaIzinGaleri() }
         binding.btnTutupHasil.setOnClickListener { tutupHasil() }
+        binding.btnFlash.setOnClickListener { toggleFlash() }
+        binding.btnFlashContainer.setOnClickListener { toggleFlash() }
 
         binding.viewFinder.setOnTouchListener { v, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
@@ -139,6 +142,8 @@ class IdentifikasiFragment : Fragment() {
 
     private fun mulaiKamera() {
         if (!isAdded) return
+        isFlashOn = false
+        updateFlashUI()
         val future = ProcessCameraProvider.getInstance(requireContext())
         future.addListener(
                 {
@@ -327,6 +332,33 @@ class IdentifikasiFragment : Fragment() {
             val progressDrawable = binding.pbLiveKonfiden.progressDrawable
             progressDrawable?.colorFilter =
                     PorterDuffColorFilter(warnaBadge, android.graphics.PorterDuff.Mode.SRC_IN)
+        }
+    }
+
+    private fun toggleFlash() {
+        val control = cameraControl?.cameraControl ?: return toast("Kamera belum siap")
+        val targetState = !isFlashOn
+        control.enableTorch(targetState).addListener({
+            isFlashOn = targetState
+            kamera?.flashMode = if (targetState) ImageCapture.FLASH_MODE_ON else ImageCapture.FLASH_MODE_OFF
+            updateFlashUI()
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun updateFlashUI() {
+        if (_binding == null) return
+        if (isFlashOn) {
+            binding.btnFlash.setColorFilter(
+                ContextCompat.getColor(requireContext(), com.modul.LabuNusa.R.color.hijau_primer),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.btnFlashContainer.setBackgroundResource(com.modul.LabuNusa.R.drawable.bg_putih_bulat)
+        } else {
+            binding.btnFlash.setColorFilter(
+                ContextCompat.getColor(requireContext(), com.modul.LabuNusa.R.color.putih),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            binding.btnFlashContainer.setBackgroundResource(com.modul.LabuNusa.R.drawable.bg_ikon_putih_alpha)
         }
     }
 
@@ -665,7 +697,7 @@ class IdentifikasiFragment : Fragment() {
                                 EntitasRiwayat(
                                         lokasiGambar = imagePath,
                                         hasilKlasifikasi = hasil.label,
-                                        skorAkurasi = skorDisimpan
+                                        skorKepercayaan = skorDisimpan
                                 )
                         )
             } catch (e: Exception) {

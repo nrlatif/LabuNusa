@@ -373,11 +373,24 @@
                 app:tint="@color/putih" />
         </LinearLayout>
 
-        <!-- Spacer kanan agar tombol galeri-potret simetris -->
-        <View
+        <!-- Tombol Senter (Flash) -->
+        <LinearLayout
+            android:id="@+id/btnFlashContainer"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_marginStart="28dp" />
+            android:layout_marginStart="28dp"
+            android:background="@drawable/bg_ikon_putih_alpha"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/btnFlash"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_flash"
+                app:tint="@color/putih" />
+        </LinearLayout>
 
     </LinearLayout>
 

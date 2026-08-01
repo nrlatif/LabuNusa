@@ -25,7 +25,7 @@ class RiwayatFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var semuaData: List<EntitasRiwayat> = emptyList()
-    private var filterAktif = "SEMUA" // SEMUA | SEHAT | PENYAKIT | NON_DAUN
+    private var filterAktif = "SEMUA" // SEMUA | SEHAT | PENYAKIT
 
     private lateinit var adapter: RiwayatAdapter
 
@@ -77,7 +77,6 @@ class RiwayatFragment : Fragment() {
             filterAktif = when {
                 checkedIds.contains(binding.chipSehat.id) -> "SEHAT"
                 checkedIds.contains(binding.chipPenyakit.id) -> "PENYAKIT"
-                checkedIds.contains(binding.chipNonDaun.id) -> "NON_DAUN"
                 else -> "SEMUA"
             }
             terapkanFilter()
@@ -114,11 +113,7 @@ class RiwayatFragment : Fragment() {
                 it.hasilKlasifikasi.contains("Sehat", ignoreCase = true)
             }
             "PENYAKIT" -> semuaData.filter {
-                !it.hasilKlasifikasi.contains("Sehat", ignoreCase = true) &&
-                !it.hasilKlasifikasi.contains("Bukan", ignoreCase = true)
-            }
-            "NON_DAUN" -> semuaData.filter {
-                it.hasilKlasifikasi.contains("Bukan", ignoreCase = true)
+                !it.hasilKlasifikasi.contains("Sehat", ignoreCase = true)
             }
             else -> semuaData
         }
@@ -200,7 +195,7 @@ class RiwayatFragment : Fragment() {
         val format = java.text.SimpleDateFormat("dd MMM yyyy • HH:mm", java.util.Locale("id", "ID"))
         tvWaktuDetail.text = format.format(java.util.Date(entitas.waktuScan))
         tvLabelDetail.text = entitas.hasilKlasifikasi
-        tvSkorDetail.text = "Kepercayaan: ${(entitas.skorAkurasi * 100).toInt()}%"
+        tvSkorDetail.text = "Kepercayaan: ${(entitas.skorKepercayaan * 100).toInt()}%"
         tvMitigasiDetail.text = com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(entitas.hasilKlasifikasi)
 
         val isSehat = entitas.hasilKlasifikasi.contains("Sehat", ignoreCase = true)

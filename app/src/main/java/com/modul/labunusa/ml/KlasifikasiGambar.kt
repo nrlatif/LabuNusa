@@ -100,6 +100,20 @@ class PengklasifikasiGambar(private val konteks: Context) {
                 return HasilKlasifikasi("Tidak Teridentifikasi", maxScore.coerceIn(0f, 1f))
             }
 
+            val secondScore =
+                    scores.indices.filter { it != maxIdx }.maxOfOrNull { scores[it] } ?: 0f
+            if ((maxScore - secondScore) < MIN_GAP_SKOR) {
+                return HasilKlasifikasi("Tidak Teridentifikasi", maxScore.coerceIn(0f, 1f))
+            }
+
+            val entropy =
+                    scores.fold(0f) { acc, s ->
+                        if (s > 1e-9f) acc - s * Math.log(s.toDouble()).toFloat() else acc
+                    }
+            if (entropy > MAX_ENTROPY) {
+                return HasilKlasifikasi("Tidak Teridentifikasi", maxScore.coerceIn(0f, 1f))
+            }
+
             val rawLabel = labels.getOrElse(maxIdx) { "Tidak Dikenali" }
             HasilKlasifikasi(rawLabel.replace("_", " "), maxScore.coerceIn(0f, 1f))
         } catch (e: Exception) {
@@ -146,11 +160,13 @@ class PengklasifikasiGambar(private val konteks: Context) {
 
     companion object {
         private const val TAG = "Pengklasifikasi"
-        private const val MODEL_FILE = "mobilenetv2_labu_float32.tflite"
+        private const val MODEL_FILE = "mobilenetv2_labuV2_float32_final.tflite"
         private const val LABELS_FILE = "labels.txt"
         private const val INPUT_SIZE = 224
-        const val THRESHOLD_DAUN = 0.70f
-        private const val MIN_RASIO_HIJAU = 0.15f
-        private const val MIN_VARIANCE_TEKSTUR = 0.003f
+        const val THRESHOLD_DAUN = 0.35f
+        private const val MIN_GAP_SKOR = 0.10f
+        private const val MAX_ENTROPY = 1.2f
+        private const val MIN_RASIO_HIJAU = 0.10f
+        private const val MIN_VARIANCE_TEKSTUR = 0.002f
     }
 }

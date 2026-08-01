@@ -121,7 +121,7 @@ class EntitasRiwayat <<Entity>> {
     + waktuScan : Long
     + lokasiGambar : String
     + hasilKlasifikasi : String
-    + skorAkurasi : Float
+    + skorKepercayaan : Float
 }
 
 class SaranPenanganan <<Singleton>> {

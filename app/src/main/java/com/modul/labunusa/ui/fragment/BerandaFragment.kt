@@ -20,7 +20,6 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class BerandaFragment : Fragment() {
@@ -201,7 +200,7 @@ class BerandaFragment : Fragment() {
         val format = java.text.SimpleDateFormat("dd MMM yyyy • HH:mm", java.util.Locale("id", "ID"))
         tvWaktuDetail.text = format.format(java.util.Date(entitas.waktuScan))
         tvLabelDetail.text = entitas.hasilKlasifikasi
-        tvSkorDetail.text = "Kepercayaan: ${(entitas.skorAkurasi * 100).toInt()}%"
+        tvSkorDetail.text = "Kepercayaan: ${(entitas.skorKepercayaan * 100).toInt()}%"
         tvMitigasi.text =
                 com.modul.LabuNusa.utils.SaranPenanganan.ambilSaran(entitas.hasilKlasifikasi)
 

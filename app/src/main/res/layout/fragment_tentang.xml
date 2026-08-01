@@ -148,22 +148,77 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Nama & NIM -->
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- Profil Pengembang -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Muhamad Nurlatif"
-                        android:textColor="@color/teks_gelap"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
 
+                        <!-- Avatar Inisial Bulat -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1.5dp"
+                            app:strokeColor="@color/hijau_muda"
+                            app:cardBackgroundColor="@color/hijau_kartu"
+                            android:layout_marginEnd="12dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="MN"
+                                android:textColor="@color/hijau_primer"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:gravity="center" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- Nama & NIM -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Muhamad Nurlatif"
+                                android:textColor="@color/teks_gelap"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="NIM. 20220810108"
+                                android:textColor="@color/teks_sekunder"
+                                android:textSize="13sp"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Divider horizontal sebelum logo -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/abu_garis"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Label Institusi/Afiliasi -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="NIM. 20220810108"
+                        android:text="Institusi &amp; Afiliasi"
                         android:textColor="@color/teks_sekunder"
-                        android:textSize="13sp"
-                        android:layout_marginTop="2dp" />
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"
+                        android:layout_marginBottom="12dp" />
 
                     <!-- Logo Institusi -->
                     <LinearLayout
@@ -171,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="4dp">
 
                         <!-- Logo Uniku -->
                         <LinearLayout
@@ -182,8 +237,8 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:layout_width="72dp"
-                                android:layout_height="72dp"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
                                 android:src="@drawable/logo_uniku"
                                 android:scaleType="fitCenter"
                                 android:contentDescription="Logo Universitas Kuningan" />
@@ -198,13 +253,14 @@
                                 android:layout_marginTop="6dp" />
                         </LinearLayout>
 
-                        <!-- Divider vertikal -->
+                        <!-- Divider vertikal 1 -->
                         <View
                             android:layout_width="1dp"
-                            android:layout_height="80dp"
+                            android:layout_height="72dp"
                             android:background="@color/abu_garis"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp" />
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_gravity="center_vertical" />
 
                         <!-- Logo Fkom -->
                         <LinearLayout
@@ -215,8 +271,8 @@
                             android:gravity="center">
 
                             <ImageView
-                                android:layout_width="72dp"
-                                android:layout_height="72dp"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
                                 android:src="@drawable/logo_fkom"
                                 android:scaleType="fitCenter"
                                 android:contentDescription="Logo Fakultas Ilmu Komputer" />
@@ -225,6 +281,40 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Fakultas Ilmu Komputer"
+                                android:textColor="@color/teks_sekunder"
+                                android:textSize="10sp"
+                                android:gravity="center"
+                                android:layout_marginTop="6dp" />
+                        </LinearLayout>
+
+                        <!-- Divider vertikal 2 -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="72dp"
+                            android:background="@color/abu_garis"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_gravity="center_vertical" />
+
+                        <!-- Logo SMKN 1 -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:src="@drawable/logo_smkn1"
+                                android:scaleType="fitCenter"
+                                android:contentDescription="Logo SMK Negeri 1 Kuningan" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="SMK Negeri 1 Kuningan"
                                 android:textColor="@color/teks_sekunder"
                                 android:textSize="10sp"
                                 android:gravity="center"

@@ -10,56 +10,64 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Batang vertikal L -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M22,18 L36,18 L36,80 L86,80 L86,92 L22,92 Z" />
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="0.65"
+        android:scaleY="0.65">
 
-    <!-- Daun lobus kiri -->
-    <path
-        android:fillColor="#6DBF47"
-        android:pathData="
-          M39,62
-          C39,62 31,54 31,44
-          C31,34 38,27 45,29
-          C50,30 52,36 51,43
-          C50,50 45,57 39,62 Z" />
+        <!-- Batang vertikal L -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M22,18 L36,18 L36,80 L86,80 L86,92 L22,92 Z" />
 
-    <!-- Daun lobus kanan -->
-    <path
-        android:fillColor="#52A832"
-        android:pathData="
-          M39,62
-          C39,62 48,57 53,48
-          C58,39 56,29 50,28
-          C45,27 41,33 40,41
-          C39,49 39,56 39,62 Z" />
+        <!-- Daun lobus kiri -->
+        <path
+            android:fillColor="#6DBF47"
+            android:pathData="
+              M39,62
+              C39,62 31,54 31,44
+              C31,34 38,27 45,29
+              C50,30 52,36 51,43
+              C50,50 45,57 39,62 Z" />
 
-    <!-- Tangkai -->
-    <path
-        android:strokeColor="#3D8C1F"
-        android:strokeWidth="1.8"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M39,62 L39,78" />
+        <!-- Daun lobus kanan -->
+        <path
+            android:fillColor="#52A832"
+            android:pathData="
+              M39,62
+              C39,62 48,57 53,48
+              C58,39 56,29 50,28
+              C45,27 41,33 40,41
+              C39,49 39,56 39,62 Z" />
 
-    <!-- Urat daun -->
-    <path
-        android:strokeColor="#AAFFCC"
-        android:strokeWidth="0.9"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M39,62 L33,34" />
-    <path
-        android:strokeColor="#88DD99"
-        android:strokeWidth="0.9"
-        android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M39,62 L51,32" />
+        <!-- Tangkai -->
+        <path
+            android:strokeColor="#3D8C1F"
+            android:strokeWidth="1.8"
+            android:strokeLineCap="round"
+            android:fillColor="#00000000"
+            android:pathData="M39,62 L39,78" />
 
-    <!-- Aksen titik hijau di atas L -->
-    <path
-        android:fillColor="#6DBF47"
-        android:pathData="M22,18 L28,18 L28,24 L22,24 Z" />
+        <!-- Urat daun -->
+        <path
+            android:strokeColor="#AAFFCC"
+            android:strokeWidth="0.9"
+            android:strokeLineCap="round"
+            android:fillColor="#00000000"
+            android:pathData="M39,62 L33,34" />
+        <path
+            android:strokeColor="#88DD99"
+            android:strokeWidth="0.9"
+            android:strokeLineCap="round"
+            android:fillColor="#00000000"
+            android:pathData="M39,62 L51,32" />
+
+        <!-- Aksen titik hijau di atas L -->
+        <path
+            android:fillColor="#6DBF47"
+            android:pathData="M22,18 L28,18 L28,24 L22,24 Z" />
+
+    </group>
 
 </vector>
