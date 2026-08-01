@@ -1,4 +1,4 @@
-# 🎃 LabuNusa / LabuKu
+# 🎃 LabuNusa
 
 [![Android Platform](https://img.shields.io/badge/Platform-Android-green.svg?style=flat-square&logo=android)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-purple.svg?style=flat-square&logo=kotlin)](https://kotlinlang.org)
@@ -49,10 +49,7 @@ Untuk meng-clone repositori ini ke komputer lokal Anda guna pengembangan lebih l
 
 ```bash
 # Clone menggunakan remote origin utama
-git clone https://github.com/nrlatif/Skripshit.git
-
-# Atau clone melalui repository sekunder
-git clone https://github.com/nrlatif/Skripsiii.git
+git clone https://github.com/nrlatif/LabuNusa.git
 ```
 
 ---
