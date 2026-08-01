@@ -35,14 +35,14 @@ Anda dapat mengunduh dan memasang aplikasi ini melalui beberapa cara berikut:
 ### 1. Unduh APK Langsung (Untuk Pengguna Umum)
 Cara termudah untuk menggunakan aplikasi di HP Android Anda adalah dengan mengunduh berkas `.apk` siap pakai:
 
-👉 [**Unduh LabuNusa APK Versi Terbaru**](https://github.com/nrlatif/Skripshit/releases/latest/download/app-release.apk)
+👉 [**Unduh LabuNusa APK Versi Terbaru**](https://github.com/nrlatif/LabuNusa/releases/latest/download/app-release.apk)
 
 > 💡 *Catatan: Jika Anda mengunduh APK di luar Google Play Store, pastikan Anda telah mengaktifkan opsi "Izinkan instalasi dari sumber tidak dikenal" (Allow installation from unknown sources) di pengaturan keamanan Android Anda.*
 
 ### 2. Unduh Source Code (.ZIP)
 Bagi Anda yang ingin melihat berkas kode sumber tanpa menggunakan Git:
 
-👉 [**Unduh Source Code (ZIP)**](https://github.com/nrlatif/Skripshit/archive/refs/heads/main.zip)
+👉 [**Unduh Source Code (ZIP)**](https://github.com/nrlatif/LabuNusa/archive/refs/heads/main.zip)
 
 ### 3. Menggunakan Git Clone (Untuk Developer)
 Untuk meng-clone repositori ini ke komputer lokal Anda guna pengembangan lebih lanjut:
