@@ -522,8 +522,12 @@ class IdentifikasiFragment : Fragment() {
         // Jangan simpan riwayat jika bukan daun
         if (isBukan) return
 
-        lifecycleScope.launch {
-            simpanRiwayat(bitmap, hasil, skorTampil)
+        val appContext = context?.applicationContext
+        if (appContext != null) {
+            // Gunakan scope dari activity agar tidak dibatalkan jika fragment ditutup/kembali
+            (activity as? androidx.lifecycle.LifecycleOwner)?.lifecycleScope?.launch {
+                simpanRiwayat(appContext, bitmap, hasil, skorTampil)
+            }
         }
     }
 
@@ -672,11 +676,11 @@ class IdentifikasiFragment : Fragment() {
     }
 
     private suspend fun simpanRiwayat(
+            ctx: android.content.Context,
             bitmap: Bitmap,
             hasil: HasilKlasifikasi,
             skorDisimpan: Float
     ) {
-        val ctx = context?.applicationContext ?: return
         withContext(Dispatchers.IO) {
             try {
                 val ts = System.currentTimeMillis()

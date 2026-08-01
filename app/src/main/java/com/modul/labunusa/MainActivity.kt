@@ -1,12 +1,17 @@
 package com.modul.LabuNusa
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.pm.PackageManager
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.modul.LabuNusa.databinding.ActivityMainBinding
 import com.modul.LabuNusa.ui.adapter.MainPagerAdapter
@@ -19,10 +24,17 @@ class MainActivity : AppCompatActivity() {
     private val warnaGelap = 0xFF1C5A3B.toInt()
     private val headerViews = arrayOfNulls<View>(4)
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { _ ->
+            // Perizinan telah diproses
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        periksaDanMintaPerizinan()
 
         // Force Edge-to-Edge: Gambar activity menembus ke bawah status bar
         androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -167,6 +179,28 @@ class MainActivity : AppCompatActivity() {
             binding.navContainer.startAnimation(
                     AnimationUtils.loadAnimation(this, R.anim.slide_up_show)
             )
+        }
+    }
+
+    private fun periksaDanMintaPerizinan() {
+        val listIzin = mutableListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            listIzin.add(Manifest.permission.CAMERA)
+        }
+
+        val izinPenyimpanan = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+        if (ContextCompat.checkSelfPermission(this, izinPenyimpanan) != PackageManager.PERMISSION_GRANTED) {
+            listIzin.add(izinPenyimpanan)
+        }
+
+        if (listIzin.isNotEmpty()) {
+            requestPermissionLauncher.launch(listIzin.toTypedArray())
         }
     }
 }
