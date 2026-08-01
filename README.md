@@ -16,10 +16,10 @@ Aplikasi Android berbasis Machine Learning untuk melakukan klasifikasi dan detek
 ### Fitur Utama:
 * **Deteksi Real-Time**: Menggunakan kamera perangkat (ditenagai oleh Android CameraX) untuk menangkap gambar daun dan mendeteksi kondisi kesehatan daun secara langsung.
 * **Klasifikasi Penyakit**: Mampu mendeteksi 4 kondisi utama pada daun labu:
-  1. **Bercak Daun** (Leaf Spot)
-  2. **Daun Sehat** (Healthy Leaf)
-  3. **Embun Tepung** (Powdery Mildew)
-  4. **Layu Fusarium** (Fusarium Wilt)
+  * **Bercak Daun** (Leaf Spot)
+  * **Daun Sehat** (Healthy Leaf)
+  * **Embun Tepung** (Powdery Mildew)
+  * **Layu Fusarium** (Fusarium Wilt)
 * **Pre-Screening Cerdas**: Dilengkapi dengan validasi gambar sebelum klasifikasi dilakukan (untuk mencegah deteksi palsu pada objek selain daun):
   * **Rasio Hijau Dominan**: Memastikan objek yang difoto memiliki warna hijau daun yang cukup.
   * **Analisis Tekstur**: Memeriksa variansi tekstur objek untuk memastikan itu adalah daun sungguhan.
